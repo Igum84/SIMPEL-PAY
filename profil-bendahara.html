@@ -125,10 +125,10 @@ input[type=date].in{min-height:42px}
 .btn.red{background:var(--red);color:#fff}.btn.red:hover{background:#e0342a}
 
 /* Modal */
-.ov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
+.ov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;overflow:hidden;padding:calc(16px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));background:rgba(0,0,0,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
   visibility:hidden;pointer-events:none;transition:background .3s ease,backdrop-filter .3s ease,-webkit-backdrop-filter .3s ease,visibility 0s linear .35s}
 .ov.open{background:rgba(20,20,40,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);visibility:visible;pointer-events:auto;transition:background .3s ease,backdrop-filter .3s ease,-webkit-backdrop-filter .3s ease,visibility 0s}
-.mcard{width:min(440px,100%);max-height:calc(100vh - 32px);overflow:auto;background:rgba(255,255,255,.9);opacity:0;transform:translateY(24px) scale(.94);transition:opacity .25s ease,transform .38s cubic-bezier(.2,.9,.25,1.15)}
+.mcard{width:min(440px,100%);max-height:calc(100vh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:rgba(255,255,255,.9);opacity:0;transform:translateY(24px) scale(.94);transition:opacity .25s ease,transform .38s cubic-bezier(.2,.9,.25,1.15)}
 .ov.open .mcard{opacity:1;transform:none}
 .mfoot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 .mfoot .btn{min-width:92px}
