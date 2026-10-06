@@ -464,6 +464,12 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .ft-del:hover{background:var(--red)}.ft-del svg{width:15px;height:15px}
 .ft-add{aspect-ratio:1039/663;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;border:2px dashed rgba(10,122,255,.5);border-radius:6px;background:rgba(10,122,255,.06);color:#0a62d1;font-size:14px;font-weight:600;cursor:pointer;margin:0;transition:background .15s}
 .ft-add:hover{background:rgba(10,122,255,.12)}.ft-add svg{width:30px;height:30px}
+.ft-act{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(10,122,255,.12);color:#0a62d1;transition:opacity .15s}
+.ft-act:hover{opacity:.75}.ft-act:disabled{opacity:.4;cursor:progress}.ft-act.g{background:rgba(120,120,128,.16);color:#3a3a3c}.ft-act[hidden],.ft-ic[hidden]{display:none}
+.ft-act svg{width:16px;height:16px}
+.ft-view{margin-top:26px}.ft-view[hidden]{display:none}
+.ft-view iframe{display:block;width:100%;height:min(78vh,1000px);border:1px solid rgba(0,0,0,.12);border-radius:6px;background:#f2f2f4}
+.ft-view .ft-open{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;color:#0a62d1;text-decoration:underline}
 @media screen and (max-width:640px){#mFoto{padding-left:8px;padding-right:8px}.ft-card{padding:14px 16px 24px}.ft-bar{margin-bottom:18px}.ft-hd{font-size:15px}.ft-grid{gap:16px;margin-top:20px}}
 @media print{.nav,.dock,.toast,.ov,.lihat,th:last-child,td:last-child{display:none!important}body{background:#fff;padding:0}.wrap{padding:0}.panel{box-shadow:none;background:#fff}.tw{overflow:visible}table{min-width:0;font-size:9px}th,td{padding:5px 6px;color:#000}.stat{break-inside:avoid}}
 
@@ -724,12 +730,18 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 <div class="ov" id="mFoto" aria-hidden="true">
   <div class="mcard ft-card" role="dialog" aria-modal="true" aria-labelledby="ftT">
     <div class="ft-bar">
+      <button class="ft-act g" type="button" id="ftCancel" hidden>Batal</button>
+      <button class="ft-act" type="button" id="ftReplace" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12A9 9 0 0 1 18.5 5.8L21 8"/><path d="M21 3v5h-5"/></svg>Ganti Photo</button>
       <button class="ft-ic" type="button" id="ftPrint" aria-label="Cetak / Simpan PDF" title="Cetak / Simpan PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></button>
       <button class="ft-ic x" type="button" id="ftClose" aria-label="Tutup" title="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <h2 class="ft-hd" id="ftT">Photo Kegiatan/Produk</h2>
     <div class="ft-hd" id="ftSub"></div>
     <div class="ft-st" id="ftSt" role="status" aria-live="polite" hidden></div>
+    <div class="ft-view" id="ftView" hidden>
+      <iframe id="ftFrame" title="PDF Photo Kegiatan/Produk"></iframe>
+      <a class="ft-open" id="ftOpen" href="#" target="_blank" rel="noopener">Buka PDF di tab baru</a>
+    </div>
     <div class="ft-grid" id="ftGrid"></div>
     <input type="file" id="ftFile" accept="image/*" multiple hidden>
   </div>
@@ -1214,7 +1226,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   /* ===== Photo Kegiatan/Produk =====
      Foto hanya ditampung di browser. Saat ikon printer diklik, dibuat 1 file PDF (A4 portrait, 2 foto per lembar),
      dibuka untuk dicetak/disimpan, dan yang diunggah ke bucket hanyalah file PDF-nya. */
-  var FT_BUCKET='aset',FT_DIR='foto-kegiatan',FT_MAX=4,mft=$('mFoto'),ftRow=null,ftItems=[],ftBusy=false,ftDirty=false;
+  var FT_BUCKET='aset',FT_DIR='foto-kegiatan',FT_MAX=4,mft=$('mFoto'),ftRow=null,ftItems=[],ftBusy=false,ftDirty=false,ftSaved=null;
   var FT_X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var FT_CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   function ftOk(x){return x.ok?x:fail(x)}
@@ -1235,14 +1247,14 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       .then(ftOk)
       .then(function(){
         ftStatus('wait','Mencatat data ke tabel foto_kegiatan\u2026');
-        var d={path:path,url:pub,keterangan:n+' foto'};
+        var d={path:path,url:pub,keterangan:n+' foto'};ftSaved=pub;
         return fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+q+'&select=id',{headers:hdr()}).then(ftOk).then(function(r){return r.json()}).then(function(a){
           if(a&&a.length)return fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+q,{method:'PATCH',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(d)}).then(ftOk);
           d.nomor_bukti=row.nomor_bukti;
           return fetch(SB_URL+'/rest/v1/foto_kegiatan',{method:'POST',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(d)}).then(ftOk);
         }).catch(function(e){e.step='tabel';throw e});
       })
-      .then(function(){ftStatus('ok','Tersimpan: PDF di bucket "'+FT_BUCKET+'" ('+path+') dan data di tabel foto_kegiatan.');toast('PDF tersimpan.')});
+      .then(function(){ftStatus('ok','Tersimpan: PDF di bucket "'+FT_BUCKET+'" ('+path+') dan data di tabel foto_kegiatan.');toast('PDF tersimpan.');if(ftRow===row)ftShowPdf(pub)});
   }
   function ftSeg(r){return String(r.nomor_bukti).replace(/[^A-Za-z0-9_-]/g,'_')}
   function ftLoadPdf(){
@@ -1306,18 +1318,52 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     }
     return doc;
   }
+  /* Mode tampilan: PDF yang sudah ada di tabel foto_kegiatan ditampilkan; tombol "Ganti Photo" membuka mode unggah */
+  function ftMode(m){
+    var view=m==='view',edit=m==='edit';
+    $('ftView').hidden=!view;$('ftGrid').hidden=!edit;
+    $('ftPrint').hidden=!edit;$('ftReplace').hidden=!view;
+    $('ftCancel').hidden=!(edit&&ftExistUrl);
+  }
+  var ftExistUrl='';
+  function ftShowPdf(url){
+    ftExistUrl=url;ftItems=[];ftDirty=false;
+    var u=url+(url.indexOf('?')<0?'?':'&')+'t='+Date.now();
+    $('ftFrame').src=u;$('ftOpen').href=u;ftMode('view');
+  }
+  function ftEdit(){ftItems=[];ftDirty=false;$('ftFrame').src='about:blank';renderFoto();ftMode('edit')}
   function openFoto(r){
-    ftRow=r;ftItems=[];ftBusy=false;ftDirty=false;ftStatus();
+    ftRow=r;ftItems=[];ftBusy=false;ftDirty=false;ftExistUrl='';ftStatus();
     $('ftSub').textContent=[r.nomor_bukti,r.uraian].filter(Boolean).join(' \u00b7 ');
-    renderFoto();openM(mft,db);mft.querySelector('.ft-card').scrollTop=0;
+    $('ftView').hidden=true;$('ftGrid').hidden=true;$('ftPrint').hidden=true;$('ftReplace').hidden=true;$('ftCancel').hidden=true;$('ftFrame').src='about:blank';
+    openM(mft,db);mft.querySelector('.ft-card').scrollTop=0;
     ftLoadPdf().catch(function(){});
+    /* Cek tabel foto_kegiatan: bila sudah ada PDF untuk Nomor BKU ini, tampilkan */
+    ftStatus('wait','Memeriksa PDF tersimpan\u2026');
+    fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+encodeURIComponent(r.nomor_bukti)+'&select=url,path&limit=1',{headers:hdr()})
+      .then(ftOk).then(function(x){return x.json()}).then(function(a){
+        if(ftRow!==r)return;
+        var f=a&&a[0],url=f&&(f.url||(f.path?SB_URL+'/storage/v1/object/public/'+FT_BUCKET+'/'+f.path:''));
+        ftStatus();
+        if(url)ftShowPdf(url);else{renderFoto();ftMode('edit')}
+      }).catch(function(e){
+        if(ftRow!==r)return;
+        ftStatus();renderFoto();ftMode('edit');
+        toast('Gagal memeriksa PDF tersimpan: '+(e.message||e));
+      });
   }
   function closeFoto(){
     if(ftBusy)return;
     if(ftDirty&&ftItems.length&&!window.confirm('Foto belum dicetak/disimpan sebagai PDF dan akan hilang. Tutup?'))return;
-    ftRow=null;ftItems=[];ftDirty=false;closeM(mft);
+    ftRow=null;ftItems=[];ftDirty=false;ftExistUrl='';$('ftFrame').src='about:blank';closeM(mft);
   }
   $('ftClose').addEventListener('click',closeFoto);
+  $('ftReplace').addEventListener('click',function(){if(!ftBusy)ftEdit()});
+  $('ftCancel').addEventListener('click',function(){
+    if(ftBusy||!ftExistUrl)return;
+    if(ftDirty&&ftItems.length&&!window.confirm('Foto yang baru dipilih belum disimpan dan akan dibuang. Batal ganti?'))return;
+    ftStatus();ftShowPdf(ftExistUrl);
+  });
   $('ftFile').addEventListener('change',function(){var f=this.files;ftAdd(f);this.value=''});
   $('ftGrid').addEventListener('click',function(e){
     var b=e.target.closest('[data-del]');if(!b||ftBusy)return;
