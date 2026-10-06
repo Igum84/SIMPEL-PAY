@@ -69,6 +69,8 @@ h1{font-size:clamp(26px,4.5vw,36px);letter-spacing:-.025em;line-height:1.1}
 .ph .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none}
 .ph .ic svg{width:18px;height:18px}
 .ph h2{font-size:18px;letter-spacing:-.01em;line-height:1.2}
+.ph-pdf{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(160deg,#ff6b5e,#e0261b);flex:none;transition:opacity .15s,transform .15s}
+.ph-pdf svg{width:15px;height:15px}.ph-pdf:hover{opacity:.85}.ph-pdf:active{transform:scale(.96)}.ph-pdf:disabled{opacity:.5;cursor:progress}
 .cnt{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);background:var(--track);padding:3px 10px;border-radius:99px}
 .tw{overflow-x:auto;border-radius:12px;box-shadow:inset 0 0 0 .5px var(--line)}
 table{width:100%;border-collapse:collapse;font-size:14px;min-width:1500px}
@@ -464,6 +466,12 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .ft-del:hover{background:var(--red)}.ft-del svg{width:15px;height:15px}
 .ft-add{aspect-ratio:1039/663;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;border:2px dashed rgba(10,122,255,.5);border-radius:6px;background:rgba(10,122,255,.06);color:#0a62d1;font-size:14px;font-weight:600;cursor:pointer;margin:0;transition:background .15s}
 .ft-add:hover{background:rgba(10,122,255,.12)}.ft-add svg{width:30px;height:30px}
+.ft-act{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(10,122,255,.12);color:#0a62d1;transition:opacity .15s}
+.ft-act:hover{opacity:.75}.ft-act:disabled{opacity:.4;cursor:progress}.ft-act.g{background:rgba(120,120,128,.16);color:#3a3a3c}.ft-act[hidden],.ft-ic[hidden]{display:none}
+.ft-act svg{width:16px;height:16px}
+.ft-view{margin-top:26px}.ft-view[hidden]{display:none}
+.ft-view iframe{display:block;width:100%;height:min(78vh,1000px);border:1px solid rgba(0,0,0,.12);border-radius:6px;background:#f2f2f4}
+.ft-view .ft-open{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;color:#0a62d1;text-decoration:underline}
 @media screen and (max-width:640px){#mFoto{padding-left:8px;padding-right:8px}.ft-card{padding:14px 16px 24px}.ft-bar{margin-bottom:18px}.ft-hd{font-size:15px}.ft-grid{gap:16px;margin-top:20px}}
 @media print{.nav,.dock,.toast,.ov,.lihat,th:last-child,td:last-child{display:none!important}body{background:#fff;padding:0}.wrap{padding:0}.panel{box-shadow:none;background:#fff}.tw{overflow:visible}table{min-width:0;font-size:9px}th,td{padding:5px 6px;color:#000}.stat{break-inside:avoid}}
 
@@ -506,7 +514,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   <section class="stats" id="stats" aria-label="Ringkasan"></section>
 
   <section class="panel box">
-    <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#5be37a,#1fa23c)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg></span><div><h2>Daftar Transaksi Belanja Barang dan Jasa</h2></div><span class="cnt" id="cnt">0 data</span></div>
+    <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#5be37a,#1fa23c)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg></span><div><h2>Daftar Transaksi Belanja Barang dan Jasa</h2></div><span class="cnt" id="cnt">0 data</span><button class="ph-pdf" type="button" id="expTrx" title="Export ke PDF" aria-label="Export ke PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14.5l3 3 3-3"/></svg> PDF</button></div>
     <div class="tw">
       <table>
         <thead><tr><th>No</th><th>Nomor Order</th><th>Tanggal</th><th>Kode Rekening</th><th>Jenis Pembayaran</th><th>Nomor Bukti</th><th>Uraian</th><th class="r">Pengeluaran (Kredit)</th><th>Penerima</th><th>Jenis Pajak</th><th class="r">Besaran Pajak</th><th>Nama Toko</th><th class="r">Aksi</th></tr></thead>
@@ -516,7 +524,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   </section>
 
   <section class="panel box" style="margin-top:16px">
-    <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#4da3ff,#0a5fe0)" data-i="trip"></span><div><h2>Daftar Pembayaran SPPD</h2></div><span class="cnt" id="cntS">0 data</span></div>
+    <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#4da3ff,#0a5fe0)" data-i="trip"></span><div><h2>Daftar Pembayaran SPPD</h2></div><span class="cnt" id="cntS">0 data</span><button class="ph-pdf" type="button" id="expSppd" title="Export ke PDF" aria-label="Export ke PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14.5l3 3 3-3"/></svg> PDF</button></div>
     <div class="tw sp-t">
       <table style="min-width:1700px">
         <thead><tr><th>No</th><th>No. BKU</th><th>Tanggal</th><th>No. Rekening</th><th>Tahun Anggaran</th><th>Uraian Belanja</th><th>Penerima</th><th>Untuk Pengeluaran</th><th class="r">Uang Harian</th><th class="r">Transportasi</th><th class="r">Penginapan</th><th class="r">Representatif</th><th class="r">Taksi</th><th class="r">Jumlah</th><th class="r">Aksi</th></tr></thead>
@@ -724,12 +732,18 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 <div class="ov" id="mFoto" aria-hidden="true">
   <div class="mcard ft-card" role="dialog" aria-modal="true" aria-labelledby="ftT">
     <div class="ft-bar">
+      <button class="ft-act g" type="button" id="ftCancel" hidden>Batal</button>
+      <button class="ft-act" type="button" id="ftReplace" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12A9 9 0 0 1 18.5 5.8L21 8"/><path d="M21 3v5h-5"/></svg>Ganti Photo</button>
       <button class="ft-ic" type="button" id="ftPrint" aria-label="Cetak / Simpan PDF" title="Cetak / Simpan PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></button>
       <button class="ft-ic x" type="button" id="ftClose" aria-label="Tutup" title="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <h2 class="ft-hd" id="ftT">Photo Kegiatan/Produk</h2>
     <div class="ft-hd" id="ftSub"></div>
     <div class="ft-st" id="ftSt" role="status" aria-live="polite" hidden></div>
+    <div class="ft-view" id="ftView" hidden>
+      <iframe id="ftFrame" title="PDF Photo Kegiatan/Produk"></iframe>
+      <a class="ft-open" id="ftOpen" href="#" target="_blank" rel="noopener">Buka PDF di tab baru</a>
+    </div>
     <div class="ft-grid" id="ftGrid"></div>
     <input type="file" id="ftFile" accept="image/*" multiple hidden>
   </div>
@@ -875,6 +889,123 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
         $('tbS').innerHTML='<tr><td colspan="15" class="state">'+((e.code==='PGRST205'||e.code==='42P01')?'Tabel sppd belum ada di database.':'Gagal memuat data SPPD.')+'</td></tr>';
       });
   }
+
+  /* ===== Export PDF daftar (kop surat seperti Berita Acara) ===== */
+  var AT_URL='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js';
+  function expLoad(){
+    return ftLoadPdf().then(function(J){
+      if(typeof J.API.autoTable==='function')return J;
+      return new Promise(function(res,rej){
+        var sc=document.createElement('script');sc.src=AT_URL;
+        sc.onload=function(){typeof J.API.autoTable==='function'?res(J):rej(new Error('Pustaka tabel PDF tidak termuat'))};
+        sc.onerror=function(){rej(new Error('Pustaka tabel PDF gagal dimuat, periksa koneksi internet'))};
+        document.head.appendChild(sc);
+      });
+    });
+  }
+  function expImg(src){
+    return new Promise(function(res){
+      if(!src)return res(null);
+      var im=new Image();im.crossOrigin='anonymous';
+      im.onload=function(){try{var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);res({d:c.toDataURL('image/png'),w:c.width,h:c.height})}catch(e){res(null)}};
+      im.onerror=function(){res(null)};im.src=src;
+    });
+  }
+  /* Kop: logo kab. (kiri), nama pemda/dinas/sekolah + alamat + email (tengah), logo sekolah (kanan), garis bawah */
+  function expKop(doc,logos,W,M){
+    var sek=String($('navName').textContent||'').trim().toUpperCase(),cx=W/2,BOX=22,y0=9;
+    [[logos[0],M],[logos[1],W-M-BOX]].forEach(function(z){
+      var l=z[0];if(!l)return;
+      var sc=Math.min(BOX/l.w,BOX/l.h),w=l.w*sc,h=l.h*sc;
+      try{doc.addImage(l.d,'PNG',z[1]+(BOX-w)/2,y0+(BOX-h)/2,w,h)}catch(e){}
+    });
+    doc.setTextColor(0,0,0);
+    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(PEMDA,cx,y0+4,{align:'center'});doc.text(DINAS,cx,y0+9.5,{align:'center'});
+    doc.setFontSize(13);doc.text(sek,cx,y0+15.5,{align:'center'});
+    doc.setFont('helvetica','italic');doc.setFontSize(8);doc.text('Alamat : '+ALAMAT,cx,y0+20,{align:'center'});
+    doc.setFont('helvetica','normal');doc.setFontSize(8);
+    var et='Email : '+EMAIL,ew=doc.getTextWidth(et);doc.text(et,cx,y0+24,{align:'center'});
+    doc.setLineWidth(.2);doc.line(cx-ew/2,y0+24.8,cx+ew/2,y0+24.8);
+    doc.setLineWidth(.5);doc.line(M,y0+27.5,W-M,y0+27.5);
+    return y0+27.5;
+  }
+  /* Data tanda tangan: Kepala Sekolah + Kecamatan dari identitas_sekolah, Bendahara dari admin_role (jabatan Bendahara) */
+  function expSign(){
+    var o={kepsek:'',nipK:'',kec:'',bend:'',nipB:''};
+    var a=fetch(SB_URL+'/rest/v1/identitas_sekolah?id=eq.1&select=nama_kepsek,nip,kecamatan',{headers:hdr()})
+      .then(function(r){return r.ok?r.json():[]}).then(function(x){x=x&&x[0]||{};o.kepsek=x.nama_kepsek||'';o.nipK=x.nip||'';o.kec=x.kecamatan||''}).catch(function(){});
+    var b=fetch(SB_URL+'/rest/v1/admin_role?jabatan=eq.Bendahara&select=nama_admin,nip&order=id.asc&limit=1',{headers:hdr()})
+      .then(function(r){return r.ok?r.json():[]}).then(function(x){x=x&&x[0]||{};o.bend=x.nama_admin||'';o.nipB=x.nip||''}).catch(function(){});
+    return Promise.all([a,b]).then(function(){return o});
+  }
+  function expTtd(doc,g,W,H,M){
+    var y=doc.lastAutoTable.finalY+10,BH=52;
+    if(y+BH>H-14){doc.addPage();y=20}
+    var d=new Date(),iso=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    var cl=M+(W-2*M)*.25,cr=M+(W-2*M)*.75,dot='..............................';
+    doc.setTextColor(0,0,0);doc.setFont('helvetica','normal');doc.setFontSize(10);
+    doc.text('Mengetahui,',cl,y,{align:'center'});
+    doc.text((g.kec||'..........')+', '+tglPanjang(iso),cr,y,{align:'center'});
+    doc.text('Kepala Sekolah',cl,y+5.5,{align:'center'});
+    doc.text('Bendahara,',cr,y+5.5,{align:'center'});
+    doc.setFont('helvetica','bold');
+    doc.text(g.kepsek||dot,cl,y+27,{align:'center'});
+    doc.text(g.bend||dot,cr,y+27,{align:'center'});
+    doc.setFont('helvetica','normal');
+    doc.text('NIP. '+(g.nipK||dot),cl,y+32.5,{align:'center'});
+    doc.text('NIP. '+(g.nipB||dot),cr,y+32.5,{align:'center'});
+  }
+  function expPdf(btn,judul,head,body,foot,cols,fname,fsz){
+    if(btn.disabled)return;
+    btn.disabled=true;toast('Menyiapkan PDF\u2026');
+    var leftSrc='logokab.png',rightSrc=(document.querySelector('#navLogo img')||{}).src||'logo.png';
+    Promise.all([expLoad(),expImg(leftSrc),expImg(rightSrc),expSign()]).then(function(z){
+      var J=z[0],doc=new J({unit:'mm',format:'a4',orientation:'landscape',compress:true});
+      var W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight(),M=12;
+      var yl=expKop(doc,[z[1],z[2]],W,M);
+      doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0,0,0);
+      doc.text(judul,W/2,yl+8,{align:'center'});
+      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('Tahun '+yr,W/2,yl+13,{align:'center'});
+      doc.autoTable({
+        head:[head],body:body,foot:[foot],showFoot:'lastPage',startY:yl+17,theme:'grid',
+        margin:{left:M,right:M,top:14,bottom:14},
+        styles:{font:'helvetica',fontSize:fsz,cellPadding:1.3,lineColor:[0,0,0],lineWidth:.15,textColor:[0,0,0],valign:'middle',overflow:'linebreak'},
+        headStyles:{fillColor:[255,255,255],textColor:[0,0,0],fontStyle:'bold',halign:'center'},
+        footStyles:{fillColor:[255,255,255],textColor:[0,0,0],fontStyle:'bold'},
+        columnStyles:cols
+      });
+      expTtd(doc,z[3],W,H,M);
+      var n=doc.getNumberOfPages(),d=new Date(),i;
+      var ds=('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+      for(i=1;i<=n;i++){
+        doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(90,90,90);
+        doc.text('Dicetak: '+ds,M,H-7);doc.text('Halaman '+i+' dari '+n,W-M,H-7,{align:'right'});
+      }
+      doc.save(fname);toast('PDF berhasil dibuat.');
+    }).catch(function(e){toast('Gagal membuat PDF: '+(e&&e.message||e))})
+      .then(function(){btn.disabled=false});
+  }
+  $('expTrx').addEventListener('click',function(){
+    if(!rows.length){toast('Belum ada data untuk diekspor.');return}
+    var sum=rows.reduce(function(a,r){return a+Number(r.pengeluaran)},0);
+    var body=rows.map(function(r,i){return [i+1,r.nomor_order||'',tgl(r.tanggal),r.kode_rekening||'',r.jenis_pembayaran||'',r.nomor_bukti||'',r.uraian||'',rp(r.pengeluaran),r.penerima||'',r.jenis_pajak||'-',pf.format(r.besaran_pajak||0)+'%',r.nama_toko||'']});
+    expPdf(this,'DAFTAR TRANSAKSI BELANJA BARANG DAN JASA',
+      ['No','Nomor Order','Tanggal','Kode Rekening','Jenis Pembayaran','Nomor Bukti','Uraian','Pengeluaran (Kredit)','Penerima','Jenis Pajak','Besaran Pajak','Nama Toko'],
+      body,[{content:'Total Pengeluaran',colSpan:7,styles:{halign:'right'}},{content:rp(sum),styles:{halign:'right'}},{content:'',colSpan:4}],
+      {0:{cellWidth:8,halign:'center'},1:{cellWidth:27},2:{cellWidth:17,halign:'center'},3:{cellWidth:22},4:{cellWidth:22},5:{cellWidth:20},7:{cellWidth:25,halign:'right'},8:{cellWidth:25},9:{cellWidth:18},10:{cellWidth:14,halign:'center'},11:{cellWidth:25}},
+      'Daftar-Transaksi-Belanja-Barang-Jasa-'+yr+'.pdf',7);
+  });
+  $('expSppd').addEventListener('click',function(){
+    if(!sppdRows.length){toast('Belum ada data SPPD untuk diekspor.');return}
+    var K=['uang_harian','biaya_transportasi','biaya_penginapan','uang_representatif','biaya_taksi','jumlah'];
+    var tot=K.map(function(k){return sppdRows.reduce(function(a,r){return a+(Number(r[k])||0)},0)});
+    var body=sppdRows.map(function(r,i){return [i+1,r.nomor_bku||'',tgl(r.tanggal),r.no_rekening||'',r.tahun_anggaran||'',r.uraian_belanja||'',r.penerima||'',r.untuk_pengeluaran||''].concat(K.map(function(k){return rp(Number(r[k])||0)}))});
+    expPdf(this,'DAFTAR PEMBAYARAN SPPD',
+      ['No','No. BKU','Tanggal','No. Rekening','Tahun Anggaran','Uraian Belanja','Penerima','Untuk Pengeluaran','Uang Harian','Transportasi','Penginapan','Representatif','Taksi','Jumlah'],
+      body,[{content:'Total',colSpan:8,styles:{halign:'right'}}].concat(tot.map(function(v){return {content:rp(v),styles:{halign:'right'}}})),
+      {0:{cellWidth:7,halign:'center'},1:{cellWidth:16},2:{cellWidth:16,halign:'center'},3:{cellWidth:20},4:{cellWidth:13,halign:'center'},5:{cellWidth:24},6:{cellWidth:22},7:{cellWidth:30},8:{cellWidth:19,halign:'right'},9:{cellWidth:19,halign:'right'},10:{cellWidth:19,halign:'right'},11:{cellWidth:19,halign:'right'},12:{cellWidth:16,halign:'right'},13:{cellWidth:20,halign:'right'}},
+      'Daftar-Pembayaran-SPPD-'+yr+'.pdf',6.5);
+  });
 
   /* ===== Lihat SPPD ===== */
   var msd=$('mSppdD'),sdRow=null,sdOrigin=null;
@@ -1214,7 +1345,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   /* ===== Photo Kegiatan/Produk =====
      Foto hanya ditampung di browser. Saat ikon printer diklik, dibuat 1 file PDF (A4 portrait, 2 foto per lembar),
      dibuka untuk dicetak/disimpan, dan yang diunggah ke bucket hanyalah file PDF-nya. */
-  var FT_BUCKET='aset',FT_DIR='foto-kegiatan',FT_MAX=4,mft=$('mFoto'),ftRow=null,ftItems=[],ftBusy=false,ftDirty=false;
+  var FT_BUCKET='aset',FT_DIR='foto-kegiatan',FT_MAX=4,mft=$('mFoto'),ftRow=null,ftItems=[],ftBusy=false,ftDirty=false,ftSaved=null;
   var FT_X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var FT_CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   function ftOk(x){return x.ok?x:fail(x)}
@@ -1235,14 +1366,14 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       .then(ftOk)
       .then(function(){
         ftStatus('wait','Mencatat data ke tabel foto_kegiatan\u2026');
-        var d={path:path,url:pub,keterangan:n+' foto'};
+        var d={path:path,url:pub,keterangan:n+' foto'};ftSaved=pub;
         return fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+q+'&select=id',{headers:hdr()}).then(ftOk).then(function(r){return r.json()}).then(function(a){
           if(a&&a.length)return fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+q,{method:'PATCH',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(d)}).then(ftOk);
           d.nomor_bukti=row.nomor_bukti;
           return fetch(SB_URL+'/rest/v1/foto_kegiatan',{method:'POST',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(d)}).then(ftOk);
         }).catch(function(e){e.step='tabel';throw e});
       })
-      .then(function(){ftStatus('ok','Tersimpan: PDF di bucket "'+FT_BUCKET+'" ('+path+') dan data di tabel foto_kegiatan.');toast('PDF tersimpan.')});
+      .then(function(){ftStatus('ok','Tersimpan: PDF di bucket "'+FT_BUCKET+'" ('+path+') dan data di tabel foto_kegiatan.');toast('PDF tersimpan.');if(ftRow===row)ftShowPdf(pub)});
   }
   function ftSeg(r){return String(r.nomor_bukti).replace(/[^A-Za-z0-9_-]/g,'_')}
   function ftLoadPdf(){
@@ -1306,18 +1437,52 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     }
     return doc;
   }
+  /* Mode tampilan: PDF yang sudah ada di tabel foto_kegiatan ditampilkan; tombol "Ganti Photo" membuka mode unggah */
+  function ftMode(m){
+    var view=m==='view',edit=m==='edit';
+    $('ftView').hidden=!view;$('ftGrid').hidden=!edit;
+    $('ftPrint').hidden=!edit;$('ftReplace').hidden=!view;
+    $('ftCancel').hidden=!(edit&&ftExistUrl);
+  }
+  var ftExistUrl='';
+  function ftShowPdf(url){
+    ftExistUrl=url;ftItems=[];ftDirty=false;
+    var u=url+(url.indexOf('?')<0?'?':'&')+'t='+Date.now();
+    $('ftFrame').src=u;$('ftOpen').href=u;ftMode('view');
+  }
+  function ftEdit(){ftItems=[];ftDirty=false;$('ftFrame').src='about:blank';renderFoto();ftMode('edit')}
   function openFoto(r){
-    ftRow=r;ftItems=[];ftBusy=false;ftDirty=false;ftStatus();
+    ftRow=r;ftItems=[];ftBusy=false;ftDirty=false;ftExistUrl='';ftStatus();
     $('ftSub').textContent=[r.nomor_bukti,r.uraian].filter(Boolean).join(' \u00b7 ');
-    renderFoto();openM(mft,db);mft.querySelector('.ft-card').scrollTop=0;
+    $('ftView').hidden=true;$('ftGrid').hidden=true;$('ftPrint').hidden=true;$('ftReplace').hidden=true;$('ftCancel').hidden=true;$('ftFrame').src='about:blank';
+    openM(mft,db);mft.querySelector('.ft-card').scrollTop=0;
     ftLoadPdf().catch(function(){});
+    /* Cek tabel foto_kegiatan: bila sudah ada PDF untuk Nomor BKU ini, tampilkan */
+    ftStatus('wait','Memeriksa PDF tersimpan\u2026');
+    fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+encodeURIComponent(r.nomor_bukti)+'&select=url,path&limit=1',{headers:hdr()})
+      .then(ftOk).then(function(x){return x.json()}).then(function(a){
+        if(ftRow!==r)return;
+        var f=a&&a[0],url=f&&(f.url||(f.path?SB_URL+'/storage/v1/object/public/'+FT_BUCKET+'/'+f.path:''));
+        ftStatus();
+        if(url)ftShowPdf(url);else{renderFoto();ftMode('edit')}
+      }).catch(function(e){
+        if(ftRow!==r)return;
+        ftStatus();renderFoto();ftMode('edit');
+        toast('Gagal memeriksa PDF tersimpan: '+(e.message||e));
+      });
   }
   function closeFoto(){
     if(ftBusy)return;
     if(ftDirty&&ftItems.length&&!window.confirm('Foto belum dicetak/disimpan sebagai PDF dan akan hilang. Tutup?'))return;
-    ftRow=null;ftItems=[];ftDirty=false;closeM(mft);
+    ftRow=null;ftItems=[];ftDirty=false;ftExistUrl='';$('ftFrame').src='about:blank';closeM(mft);
   }
   $('ftClose').addEventListener('click',closeFoto);
+  $('ftReplace').addEventListener('click',function(){if(!ftBusy)ftEdit()});
+  $('ftCancel').addEventListener('click',function(){
+    if(ftBusy||!ftExistUrl)return;
+    if(ftDirty&&ftItems.length&&!window.confirm('Foto yang baru dipilih belum disimpan dan akan dibuang. Batal ganti?'))return;
+    ftStatus();ftShowPdf(ftExistUrl);
+  });
   $('ftFile').addEventListener('change',function(){var f=this.files;ftAdd(f);this.value=''});
   $('ftGrid').addEventListener('click',function(e){
     var b=e.target.closest('[data-del]');if(!b||ftBusy)return;
