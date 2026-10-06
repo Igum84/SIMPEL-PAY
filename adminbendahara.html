@@ -295,7 +295,7 @@ html,body{overflow-x:hidden}
   });});
 
   /* Menu Bendahara */
-  var M=[['Profil Bendahara','admin','#0a7aff','profil-bendahara.html'],['Informasi Pajak','tax','#ff9f0a','informasi-pajak.html'],['Data Penerima Pembayaran','users','#af52de','data-penerima-pembayaran.html'],['Transaksi Pembayaran','pay','#28c840','transaksi-pembayaran.html'],['Berkas Laporan','doc','#32ade6','berkas-laporan.html']];
+  var M=[['Profil Bendahara','admin','#0a7aff','profil-bendahara.html'],['Informasi Pajak','tax','#ff9f0a','informasi-pajak.html'],['Data Penerima Pembayaran','users','#af52de','data-penerima-pembayaran.html'],['Transaksi Pembayaran','pay','#28c840','transaksi-pembayaran.html']];
   document.getElementById('list').innerHTML=M.map(function(m){
     return '<a class="item" href="'+m[3]+'"><span class="ic" style="background:'+m[2]+'">'+svg(m[1])+'</span><span>'+m[0]+'</span></a>';}).join('');
 
