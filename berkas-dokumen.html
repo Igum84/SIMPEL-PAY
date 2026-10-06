@@ -383,7 +383,7 @@ table.dt{min-width:880px}
     {k:'surat',n:'Surat Order',t:'surat_order'},{k:'kwitansi',n:'Kwitansi',t:'kwitansi'},{k:'sppd',n:'SPPD',t:'sppd'},
     {k:'nota',n:'NOTA',t:'nota'},{k:'bast',n:'BAST',t:'berita_acara'},{k:'pajak',n:'Bukti Pajak',t:'nota_pajak'},
     {k:'tanda',n:'Tanda Terima',t:'tanda_terima'},{k:'foto',n:'Bukti Photo',t:'foto_kegiatan'},{k:'lengkap',n:'Berkas Lengkap'}
-  ],DOCT=T.slice(0,7).filter(function(d){return d.k!=='sppd'}),SP=2,TI=T.map(function(x,i){return i}).filter(function(i){return i!==SP}),cur=0,data={},seq=0,upIdx=0;
+  ],DOCT=T.slice(0,8).filter(function(d){return d.k!=='sppd'}),SP=2,TI=T.map(function(x,i){return i}).filter(function(i){return i!==SP}),cur=0,data={},seq=0,upIdx=0;
   $('bkTabs').innerHTML=TI.map(function(i){return '<button class="bk-tab" role="tab" type="button" data-i="'+i+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'">'+T[i].n+'</button>'}).join('');
 
   /* Definisi kolom & kartu tiap tab; rows = hasil fetch */
@@ -398,7 +398,7 @@ table.dt{min-width:880px}
         td:[n+1,'<b>'+esc(o.nomor_order)+'</b>','<span class="kode">'+esc(o.nomor_bku)+'</span>',tgl(o.tanggal),esc(o.nama_toko),'<span style="color:var(--muted)">'+esc(o.kegiatan||'—')+'</span>',it.length+' item',(o.jumlah_cetak||1)+'x',aksi(o)],
         c:{t:o.nomor_order,b:o.nomor_bku,s:o.nama_toko+(o.kegiatan?' · '+o.kegiatan:''),l:it.length+' barang'+(o.file_url?' · PDF ✓':''),r:tgl(o.tanggal)}}})};
     if(x.k==='lengkap')return {
-      th:['No','Nomor Order','Nomor BKU','Nama Toko'].concat(DOCT.map(function(d){return d.n}),['Status']),
+      th:['No','Nomor Order','Nomor BKU','Nama Toko'].concat(DOCT.map(function(d){return d.k==='foto'?'Photo Kegiatan':d.n}),['Status']),
       rows:r.map(function(o,n){
         var ada=DOCT.map(function(d){return data.set&&data.set[d.k]&&data.set[d.k][String(o.nomor_bukti).toLowerCase()]});
         var c=ada.filter(Boolean).length;
@@ -576,8 +576,8 @@ table.dt{min-width:880px}
     var p;
     if(x.k==='lengkap'){
       p=get('transaksi_pembayaran','select=id,nomor_order,nomor_bukti,tanggal,nama_toko&order=tanggal.desc,id.desc').then(function(a){
-        return Promise.all(DOCT.map(function(d){return get(d.t,'select=nomor_bku').then(function(r){return {k:d.k,r:r}}).catch(function(){return {k:d.k,r:[]}})})).then(function(all){
-          data.set={};all.forEach(function(z){data.set[z.k]={};z.r.forEach(function(o){data.set[z.k][String(o.nomor_bku).toLowerCase()]=1})});return a});
+        return Promise.all(DOCT.map(function(d){var f=d.k==='foto';return get(d.t,f?'select=nomor_bukti,url':'select=nomor_bku').then(function(r){return {k:d.k,f:f,r:r}}).catch(function(){return {k:d.k,f:f,r:[]}})})).then(function(all){
+          data.set={};all.forEach(function(z){data.set[z.k]={};z.r.forEach(function(o){if(z.f&&!o.url)return;data.set[z.k][String(z.f?o.nomor_bukti:o.nomor_bku).toLowerCase()]=1})});return a});
       });
     }else if(x.k==='foto'){
       p=Promise.all([get('transaksi_pembayaran','select=id,nomor_order,nomor_bukti,tanggal,nama_toko,uraian,penerima&order=tanggal.desc,id.desc'),get('foto_kegiatan','select=*&order=id.desc')]).then(function(z){
