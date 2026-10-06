@@ -390,6 +390,43 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .ba-ft{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px 16px}
 .ba-ft .sg{height:64px}
 @media (max-width:640px){.ba-r{grid-template-columns:20px 100px 1fr}.ba-r2{grid-template-columns:120px 1fr}.ba-ft{grid-template-columns:1fr 1fr}}
+/* Berita Acara - tampilan smartphone: tanpa geser kiri/kanan, teks tidak keluar dari tabel */
+#mBA .sr-card{overflow-x:hidden;overflow-y:auto}
+@media screen and (max-width:640px){
+  #mBA{padding-left:8px;padding-right:8px}
+  #mBA .sr-card{width:100%}
+  #mBA .sr-tools{padding:10px 12px;gap:8px}
+  #mBA .sr-tools b{font-size:15px;margin-right:auto}
+  #mBA .sr-tools .btn{min-width:0;min-height:36px;padding:6px 14px;font-size:13px}
+  #mBA .sr-paper{margin:8px;font-size:10.5px;line-height:1.4;overflow:hidden;overflow-wrap:anywhere;word-break:break-word}
+  #mBA .sr-kop{gap:6px;padding:8px 8px 6px}
+  #mBA .sr-logo{width:38px;height:38px}
+  #mBA .sr-kt .b{font-size:10.5px}
+  #mBA .sr-kt .i,#mBA .sr-kt .u{font-size:8.5px}
+  #mBA .sr-hr{margin:0 8px}
+  #mBA .sr-title{padding:6px 8px 4px;font-size:10.5px}
+  #mBA .sr-title .t{font-size:11.5px}
+  #mBA .sr-info{padding:2px 8px}
+  #mBA .sr-p{padding:6px 8px}
+  #mBA .ba-r{grid-template-columns:16px 78px minmax(0,1fr)}
+  #mBA .ba-r2{grid-template-columns:94px minmax(0,1fr)}
+  #mBA .ba-r>span,#mBA .ba-r2>span{min-width:0;overflow-wrap:anywhere}
+  #mBA .sr-paper>div[style*="padding:0 12px"]{padding:0 8px!important}
+  #mBA .ba-tb{width:100%;font-size:10px}
+  #mBA .ba-tb col:nth-child(1){width:9%!important}
+  #mBA .ba-tb col:nth-child(2){width:34%!important}
+  #mBA .ba-tb col:nth-child(3){width:12%!important}
+  #mBA .ba-tb col:nth-child(4){width:15%!important}
+  #mBA .ba-tb col:nth-child(5){width:30%!important}
+  #mBA .ba-tb th{font-size:9.5px;padding:2px 2px;overflow-wrap:anywhere}
+  #mBA .ba-tb td{padding:1px 3px;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+  #mBA .ba-tb td.ket{padding:4px 3px}
+  #mBA .ba-tb td .ed,#mBA .ba-tb td.ket{max-width:100%;overflow-wrap:anywhere}
+  #mBA .ba-ft{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 6px;padding:8px 8px 14px}
+  #mBA .ba-ft>div{min-width:0;overflow-wrap:anywhere}
+  #mBA .ba-ft .sg{height:44px}
+  #mBA .ba-ft .ed{min-width:0;max-width:100%;overflow-wrap:anywhere}
+}
 @media print{
   body.pb>*:not(#mBA){display:none!important}
   body.pb #mBA{position:static!important;display:block!important;visibility:visible!important;background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important}
