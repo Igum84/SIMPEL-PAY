@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Simpel-Pay — Sistem Informasi Manajemen Pelayanan Pembayaran</title>
+  <!-- 🔥 PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+
 <link rel="icon" type="image/png" href="logo.png">
 <meta name="description" content="Simpel-Pay: aplikasi untuk menginput dan mengelola transaksi pembayaran sekolah di luar SIPLah.">
 <style>
@@ -429,5 +436,18 @@ dialog{--text:#1d1d1f;--muted:#6e6e73;--accent:#0a7aff;--accent-2:#0062d6;--line
   });
 })();
 </script>
+
+
+             <!-- 🔥 SERVICE WORKER -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+            .then(reg => console.log('Service Worker aktif'))
+            .catch(err => console.log('SW gagal:', err));
+        });
+    }
+    </script>
+
 </body>
 </html>
