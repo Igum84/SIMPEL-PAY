@@ -69,6 +69,10 @@ h1{font-size:clamp(26px,4.5vw,36px);letter-spacing:-.025em;line-height:1.1}
 .ph .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none}
 .ph .ic svg{width:18px;height:18px}
 .ph h2{font-size:18px;letter-spacing:-.01em;line-height:1.2}
+.tsq{position:relative;margin-bottom:14px}
+.tsq svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted);pointer-events:none}
+.tsq input{width:100%;font:inherit;font-size:14px;color:var(--text);padding:10px 14px 10px 36px;border-radius:12px;border:.5px solid var(--line);background:var(--card);outline:0}
+.tsq input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(10,122,255,.2)}
 .ph-pdf{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(160deg,#ff6b5e,#e0261b);flex:none;transition:opacity .15s,transform .15s}
 .ph-pdf svg{width:15px;height:15px}.ph-pdf:hover{opacity:.85}.ph-pdf:active{transform:scale(.96)}.ph-pdf:disabled{opacity:.5;cursor:progress}
 .cnt{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);background:var(--track);padding:3px 10px;border-radius:99px}
@@ -515,6 +519,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 
   <section class="panel box">
     <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#5be37a,#1fa23c)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6.5 15h4"/></svg></span><div><h2>Daftar Transaksi Belanja Barang dan Jasa</h2></div><span class="cnt" id="cnt">0 data</span><button class="ph-pdf" type="button" id="expTrx" title="Export ke PDF" aria-label="Export ke PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14.5l3 3 3-3"/></svg> PDF</button></div>
+    <label class="tsq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="qTrx" type="search" placeholder="Cari No. BKU, uraian, atau penerima…" aria-label="Cari data" autocomplete="off"></label>
     <div class="tw">
       <table>
         <thead><tr><th>No</th><th>Nomor Order</th><th>Tanggal</th><th>Kode Rekening</th><th>Jenis Pembayaran</th><th>Nomor Bukti</th><th>Uraian</th><th class="r">Pengeluaran (Kredit)</th><th>Penerima</th><th>Jenis Pajak</th><th class="r">Besaran Pajak</th><th>Nama Toko</th><th class="r">Aksi</th></tr></thead>
@@ -525,6 +530,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 
   <section class="panel box" style="margin-top:16px">
     <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#4da3ff,#0a5fe0)" data-i="trip"></span><div><h2>Daftar Pembayaran SPPD</h2></div><span class="cnt" id="cntS">0 data</span><button class="ph-pdf" type="button" id="expSppd" title="Export ke PDF" aria-label="Export ke PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14.5l3 3 3-3"/></svg> PDF</button></div>
+    <label class="tsq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="qSppd" type="search" placeholder="Cari No. BKU, uraian belanja, atau penerima…" aria-label="Cari data" autocomplete="off"></label>
     <div class="tw sp-t">
       <table style="min-width:1700px">
         <thead><tr><th>No</th><th>No. BKU</th><th>Tanggal</th><th>No. Rekening</th><th>Tahun Anggaran</th><th>Uraian Belanja</th><th>Penerima</th><th>Untuk Pengeluaran</th><th class="r">Uang Harian</th><th class="r">Transportasi</th><th class="r">Penginapan</th><th class="r">Representatif</th><th class="r">Taksi</th><th class="r">Jumlah</th><th class="r">Aksi</th></tr></thead>
@@ -842,6 +848,10 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   var yr=new Date().getFullYear();$('period').textContent='Tahun '+yr;
 
   /* ===== Ringkasan + tabel ===== */
+  function qv(id){return String($(id).value||'').trim().toLowerCase()}
+  function hit(q,a){if(!q)return true;for(var i=0;i<a.length;i++)if(String(a[i]==null?'':a[i]).toLowerCase().indexOf(q)>-1)return true;return false}
+  function trxIdx(){var q=qv('qTrx'),o=[];rows.forEach(function(r,i){if(hit(q,[r.nomor_bukti,r.uraian,r.penerima]))o.push(i)});return o}
+  function sppdIdx(){var q=qv('qSppd'),o=[];sppdRows.forEach(function(r,i){if(hit(q,[r.nomor_bku,r.uraian_belanja,r.penerima]))o.push(i)});return o}
   function render(){
     var total=rows.length,proses=rows.filter(function(r){return r.status!=='selesai'}).length,selesai=total-proses;
     var sum=rows.reduce(function(a,r){return a+Number(r.pengeluaran)},0);
@@ -851,9 +861,9 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       ['Total diproses',nf.format(proses),pctOf(proses,total)+' dari total transaksi','mid','clock','linear-gradient(160deg,#ffb454,#f0780a)']
     ];
     $('stats').innerHTML=s.map(function(x){return '<div class="panel stat"><div class="ic" style="background:'+x[5]+'">'+svg(x[4])+'</div><small>'+x[0]+'</small><b>'+x[1]+'</b><span class="delta '+x[3]+'">'+x[2]+'</span></div>'}).join('');
-    $('cnt').textContent=total+' data';
-    $('tb').innerHTML=total?rows.map(function(r,i){
-      return '<tr><td class="num">'+(i+1)+'</td><td class="nw">'+esc(r.nomor_order)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td><span class="kode">'+esc(r.kode_rekening)+'</span></td><td>'+esc(r.jenis_pembayaran)+'</td><td class="nw">'+esc(r.nomor_bukti)+'</td><td class="uraian">'+esc(r.uraian)+'</td><td class="r num nw">'+rp(r.pengeluaran)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="nw">'+(r.jenis_pajak?esc(r.jenis_pajak):'—')+'</td><td class="r"><span class="pct">'+pf.format(r.besaran_pajak)+'%</span></td><td class="nw">'+esc(r.nama_toko)+'</td><td class="r"><button class="lihat" type="button" data-o="'+i+'">Lihat Order</button></td></tr>'}).join(''):'<tr><td colspan="13" class="state">Belum ada transaksi pembayaran. Klik <b>+ Pembayaran</b> untuk menambahkan.</td></tr>';
+    var idx=trxIdx();$('cnt').textContent=(qv('qTrx')?idx.length+' dari '+total:total)+' data';
+    $('tb').innerHTML=total?(!idx.length?'<tr><td colspan="13" class="state">Tidak ada data yang cocok dengan pencarian.</td></tr>':idx.map(function(i,n){var r=rows[i];
+      return '<tr><td class="num">'+(n+1)+'</td><td class="nw">'+esc(r.nomor_order)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td><span class="kode">'+esc(r.kode_rekening)+'</span></td><td>'+esc(r.jenis_pembayaran)+'</td><td class="nw">'+esc(r.nomor_bukti)+'</td><td class="uraian">'+esc(r.uraian)+'</td><td class="r num nw">'+rp(r.pengeluaran)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="nw">'+(r.jenis_pajak?esc(r.jenis_pajak):'—')+'</td><td class="r"><span class="pct">'+pf.format(r.besaran_pajak)+'%</span></td><td class="nw">'+esc(r.nama_toko)+'</td><td class="r"><button class="lihat" type="button" data-o="'+i+'">Lihat Order</button></td></tr>'}).join('')):'<tr><td colspan="13" class="state">Belum ada transaksi pembayaran. Klik <b>+ Pembayaran</b> untuk menambahkan.</td></tr>';
   }
   function load(){
     return fetch(SB_URL+'/rest/v1/transaksi_pembayaran?select=*,transaksi_item(*)&order=tanggal.desc,id.desc',{headers:hdr()})
@@ -873,13 +883,15 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   var sppdRows=[];
   function renderSppd(a){
     sppdRows=a;
-    $('cntS').textContent=a.length+' data';
-    $('tbS').innerHTML=a.length?a.map(function(r,i){
-      return '<tr><td class="num">'+(i+1)+'</td><td class="nw">'+esc(r.nomor_bku)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td class="nw"><span class="kode">'+esc(r.no_rekening)+'</span></td><td class="num">'+esc(r.tahun_anggaran)+'</td><td>'+esc(r.uraian_belanja)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="uraian">'+esc(r.untuk_pengeluaran)+'</td>'
+    var idx=sppdIdx();$('cntS').textContent=(qv('qSppd')?idx.length+' dari '+a.length:a.length)+' data';
+    $('tbS').innerHTML=a.length?(!idx.length?'<tr><td colspan="15" class="state">Tidak ada data yang cocok dengan pencarian.</td></tr>':idx.map(function(i,n){var r=a[i];
+      return '<tr><td class="num">'+(n+1)+'</td><td class="nw">'+esc(r.nomor_bku)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td class="nw"><span class="kode">'+esc(r.no_rekening)+'</span></td><td class="num">'+esc(r.tahun_anggaran)+'</td><td>'+esc(r.uraian_belanja)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="uraian">'+esc(r.untuk_pengeluaran)+'</td>'
         +'<td class="r num nw">'+rp(Number(r.uang_harian))+'</td><td class="r num nw">'+rp(Number(r.biaya_transportasi))+'</td><td class="r num nw">'+rp(Number(r.biaya_penginapan))+'</td><td class="r num nw">'+rp(Number(r.uang_representatif))+'</td><td class="r num nw">'+rp(Number(r.biaya_taksi))+'</td><td class="r num nw"><b>'+rp(Number(r.jumlah))+'</b></td>'
         +'<td class="r"><button class="lihat" type="button" data-s="'+i+'">Lihat SPPD</button></td></tr>';
-    }).join(''):'<tr><td colspan="15" class="state">Belum ada data SPPD.</td></tr>';
+    }).join('')):'<tr><td colspan="15" class="state">Belum ada data SPPD.</td></tr>';
   }
+  $('qTrx').addEventListener('input',render);
+  $('qSppd').addEventListener('input',function(){renderSppd(sppdRows)});
   function loadSppd(){
     return fetch(SB_URL+'/rest/v1/sppd?select=*&order=tanggal.desc,id.desc',{headers:hdr()})
       .then(function(r){return r.ok?r.json():fail(r)})
@@ -986,9 +998,10 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       .then(function(){btn.disabled=false});
   }
   $('expTrx').addEventListener('click',function(){
-    if(!rows.length){toast('Belum ada data untuk diekspor.');return}
-    var sum=rows.reduce(function(a,r){return a+Number(r.pengeluaran)},0);
-    var body=rows.map(function(r,i){return [i+1,r.nomor_order||'',tgl(r.tanggal),r.kode_rekening||'',r.jenis_pembayaran||'',r.nomor_bukti||'',r.uraian||'',rp(r.pengeluaran),r.penerima||'',r.jenis_pajak||'-',pf.format(r.besaran_pajak||0)+'%',r.nama_toko||'']});
+    var list=trxIdx().map(function(i){return rows[i]});
+    if(!list.length){toast(rows.length?'Tidak ada data yang cocok untuk diekspor.':'Belum ada data untuk diekspor.');return}
+    var sum=list.reduce(function(a,r){return a+Number(r.pengeluaran)},0);
+    var body=list.map(function(r,i){return [i+1,r.nomor_order||'',tgl(r.tanggal),r.kode_rekening||'',r.jenis_pembayaran||'',r.nomor_bukti||'',r.uraian||'',rp(r.pengeluaran),r.penerima||'',r.jenis_pajak||'-',pf.format(r.besaran_pajak||0)+'%',r.nama_toko||'']});
     expPdf(this,'DAFTAR TRANSAKSI BELANJA BARANG DAN JASA',
       ['No','Nomor Order','Tanggal','Kode Rekening','Jenis Pembayaran','Nomor Bukti','Uraian','Pengeluaran (Kredit)','Penerima','Jenis Pajak','Besaran Pajak','Nama Toko'],
       body,[{content:'Total Pengeluaran',colSpan:7,styles:{halign:'right'}},{content:rp(sum),styles:{halign:'right'}},{content:'',colSpan:4}],
@@ -996,10 +1009,11 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       'Daftar-Transaksi-Belanja-Barang-Jasa-'+yr+'.pdf',7);
   });
   $('expSppd').addEventListener('click',function(){
-    if(!sppdRows.length){toast('Belum ada data SPPD untuk diekspor.');return}
+    var list=sppdIdx().map(function(i){return sppdRows[i]});
+    if(!list.length){toast(sppdRows.length?'Tidak ada data yang cocok untuk diekspor.':'Belum ada data SPPD untuk diekspor.');return}
     var K=['uang_harian','biaya_transportasi','biaya_penginapan','uang_representatif','biaya_taksi','jumlah'];
-    var tot=K.map(function(k){return sppdRows.reduce(function(a,r){return a+(Number(r[k])||0)},0)});
-    var body=sppdRows.map(function(r,i){return [i+1,r.nomor_bku||'',tgl(r.tanggal),r.no_rekening||'',r.tahun_anggaran||'',r.uraian_belanja||'',r.penerima||'',r.untuk_pengeluaran||''].concat(K.map(function(k){return rp(Number(r[k])||0)}))});
+    var tot=K.map(function(k){return list.reduce(function(a,r){return a+(Number(r[k])||0)},0)});
+    var body=list.map(function(r,i){return [i+1,r.nomor_bku||'',tgl(r.tanggal),r.no_rekening||'',r.tahun_anggaran||'',r.uraian_belanja||'',r.penerima||'',r.untuk_pengeluaran||''].concat(K.map(function(k){return rp(Number(r[k])||0)}))});
     expPdf(this,'DAFTAR PEMBAYARAN SPPD',
       ['No','No. BKU','Tanggal','No. Rekening','Tahun Anggaran','Uraian Belanja','Penerima','Untuk Pengeluaran','Uang Harian','Transportasi','Penginapan','Representatif','Taksi','Jumlah'],
       body,[{content:'Total',colSpan:8,styles:{halign:'right'}}].concat(tot.map(function(v){return {content:rp(v),styles:{halign:'right'}}})),
