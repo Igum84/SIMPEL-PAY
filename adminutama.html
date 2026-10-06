@@ -313,7 +313,7 @@ html,body{overflow-x:hidden}
     return '<div class="tx"><span class="dot" style="background:'+x[4]+'">'+svg(x[3])+'</span><span class="m"><b>'+x[0]+'</b><small>'+x[1]+'</small></span><span class="amt">'+rp(x[2])+'</span></div>';}).join('');
 
   /* Menu sistem */
-  var M=[['Identitas Sekolah','school','#0a7aff','identitas-sekolah.html'],['Pengaturan Pajak','tax','#ff9f0a','pengaturan-pajak.html'],['Pengaturan Admin','admin','#8e8e93','pengaturan-admin.html'],['Penanda Tangan','sign','#af52de','penanda-tangan.html'],['Transaksi Pembayaran','pay','#28c840','transaksi-pembayaran.html'],['Back Up & Reset','backup','#ff453a','backup-reset.html'],['Restore','restore','#32ade6','restore.html']];
+  var M=[['Identitas Sekolah','school','#0a7aff','identitas-sekolah.html'],['Pengaturan Pajak','tax','#ff9f0a','pengaturan-pajak.html'],['Pengaturan Admin','admin','#8e8e93','pengaturan-admin.html'],['Penanda Tangan','sign','#af52de','penanda-tangan.html'],['Back Up & Reset','backup','#ff453a','backup-reset.html'],['Restore','restore','#32ade6','restore.html']];
   document.getElementById('list').innerHTML=M.map(function(m){
     return '<a class="item" href="'+m[3]+'"><span class="ic" style="background:'+m[2]+'">'+svg(m[1])+'</span><span>'+m[0]+'</span></a>';}).join('');
 
