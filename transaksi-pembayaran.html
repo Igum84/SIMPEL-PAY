@@ -173,6 +173,9 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .cr-i b{font-size:14px}.cr-i small{display:block;font-size:12px;color:var(--muted);line-height:1.4;margin-top:1px}
 .cr-t{display:inline-block;margin-left:8px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--track);color:var(--muted);vertical-align:1px}
 .cr-s{padding:28px 16px;text-align:center;color:var(--muted);font-size:14px}.cr-s a{color:var(--accent);font-weight:600;text-decoration:underline}
+.ttd-b{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:4px;vertical-align:middle;border-radius:6px;color:var(--accent);transition:background .15s}
+.ttd-b:hover{background:rgba(10,122,255,.12)}.ttd-b svg{width:14px;height:14px}
+@media print{.ttd-b{display:none!important}}
 .pil-g{display:grid;gap:10px}
 .pil-b{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;border-radius:14px;background:rgba(120,120,128,.09);box-shadow:inset 0 0 0 .5px var(--line);transition:background .15s,transform .15s}
 .pil-b:hover{background:rgba(10,122,255,.1);transform:translateY(-2px)}.pil-b:active{transform:scale(.98)}
@@ -642,6 +645,16 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   </div>
 </div>
 
+<!-- Modal daftar penanda tangan (dari tabel penanda_tangan) -->
+<div class="ov" id="mTtd" aria-hidden="true" style="z-index:75">
+  <div class="mcard cr-card" role="dialog" aria-modal="true" aria-labelledby="tdTitle">
+    <h2 class="mt" id="tdTitle">Pilih Penanda Tangan</h2>
+    <input class="in" id="ttdQ" type="search" placeholder="Cari nama, NIP, atau jabatan…" aria-label="Cari penanda tangan" autocomplete="off">
+    <div class="cr-list" id="ttdList" role="listbox" aria-label="Daftar penanda tangan"></div>
+    <div class="mfoot"><button class="btn" type="button" id="ttdClose">Tutup</button></div>
+  </div>
+</div>
+
 <!-- Modal input SPPD -->
 <div class="ov" id="mSppd" aria-hidden="true">
   <form class="mcard w" id="fs" role="dialog" aria-modal="true" aria-labelledby="sTitle" novalidate autocomplete="off">
@@ -981,6 +994,45 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   $('cariList').addEventListener('click',function(e){var b=e.target.closest('.cr-i');if(b&&cariRows)cariPick(cariRows[+b.dataset.i])});
   $('cariClose').addEventListener('click',cariClose);
   mcr.addEventListener('mousedown',function(e){if(e.target===mcr)cariClose()});
+
+  /* ===== Cari Penanda Tangan (Berita Acara: Ketua Pemeriksa): daftar dari tabel penanda_tangan ===== */
+  var mtd=$('mTtd'),ttdRows=null,ttdErr='',ttdFrom=null;
+  function ttdRender(){
+    var box=$('ttdList'),q=String($('ttdQ').value||'').trim().toLowerCase();
+    if(ttdErr){box.innerHTML='<div class="cr-s">'+esc(ttdErr)+'</div>';return}
+    if(ttdRows===null){box.innerHTML='<div class="cr-s">Memuat data\u2026</div>';return}
+    if(!ttdRows.length){box.innerHTML='<div class="cr-s">Belum ada data penanda tangan. Tambahkan di <a href="penanda-tangan.html">Penanda Tangan</a>.</div>';return}
+    var n=0,h=ttdRows.map(function(r,i){
+      if(q&&[r.nama,r.nip,r.jabatan].join(' ').toLowerCase().indexOf(q)<0)return '';
+      n++;
+      return '<button type="button" class="cr-i" role="option" data-i="'+i+'"><b>'+esc(r.nama)+'</b><span class="cr-t">'+esc(r.jabatan)+'</span><small>NIP '+(r.nip?esc(r.nip):'\u2014')+'</small></button>';
+    }).join('');
+    box.innerHTML=n?h:'<div class="cr-s">Tidak ada penanda tangan yang cocok dengan pencarian.</div>';
+  }
+  function ttdOpen(btn){
+    ttdFrom=btn;ttdRows=null;ttdErr='';$('ttdQ').value='';ttdRender();
+    mtd.classList.add('open');mtd.setAttribute('aria-hidden','false');
+    setTimeout(function(){$('ttdQ').focus()},200);
+    fetch(SB_URL+'/rest/v1/penanda_tangan?select=*&order=nama.asc',{headers:hdr()})
+      .then(function(r){return r.ok?r.json():fail(r)})
+      .then(function(a){ttdRows=a||[];ttdRender()})
+      .catch(function(e){ttdRows=[];ttdErr=(e.code==='PGRST205'||e.code==='42P01')?'Tabel penanda_tangan belum ada. Jalankan penanda-tangan.sql di SQL Editor Supabase.':'Gagal memuat data penanda tangan: '+e.message;ttdRender()});
+  }
+  function ttdClose(){mtd.classList.remove('open');mtd.setAttribute('aria-hidden','true');if(ttdFrom&&ttdFrom.focus)ttdFrom.focus()}
+  function ttdPick(r){
+    var P=$('baPaper'),kp=P.querySelector('.ed-kp'),kn=P.querySelector('.ed-kpn');
+    function set(el,v){if(!el)return;el.textContent=v;el.classList.remove('bad');el.dispatchEvent(new Event('input',{bubbles:true}))}
+    set(kp,r.nama||'');set(kn,r.nip||'');
+    ttdClose();
+    if(!r.nip)toast('Penanda tangan ini belum punya NIP. Isi NIP secara manual.');
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.ttd-b');if(b)ttdOpen(b)});
+  $('ttdQ').addEventListener('input',ttdRender);
+  $('ttdList').addEventListener('click',function(e){var b=e.target.closest('.cr-i');if(b&&ttdRows)ttdPick(ttdRows[+b.dataset.i])});
+  $('ttdClose').addEventListener('click',ttdClose);
+  mtd.addEventListener('mousedown',function(e){if(e.target===mtd)ttdClose()});
+  /* ESC menutup daftar penanda tangan saja (Berita Acara di bawahnya tetap terbuka) */
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mtd.classList.contains('open')){e.stopImmediatePropagation();ttdClose()}},true);
   /* ESC menutup daftar penerima saja (form di bawahnya tetap terbuka) */
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mcr.classList.contains('open')){e.stopImmediatePropagation();cariClose()}},true);
 
@@ -2098,7 +2150,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +'<div class="ba-ft">'
       +'<div><div>Kepala Sekolah</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+ks+'</div><div>NIP. '+kn+'</div></div>'
       +'<div><div>Bendahara BOSP</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+bnH+'</div><div>NIP. '+bnipH+'</div></div>'
-      +'<div><div>Ketua Pemeriksa Pekerjaan</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+ed('isi nama ketua pemeriksa','','ed-kp')+'</div><div>NIP. '+ed('isi NIP','','ed-kpn')+'</div></div>'
+      +'<div><div>Ketua Pemeriksa Pekerjaan</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+ed('isi nama ketua pemeriksa','','ed-kp')+'<button type="button" class="ttd-b" data-ttd="kp" contenteditable="false" aria-label="Cari penanda tangan" title="Pilih dari data penanda tangan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div><div>NIP. '+ed('isi NIP','','ed-kpn')+'</div></div>'
       +'<div><div>Penyedia Barang dan Jasa</div><div>&nbsp;</div><div class="sg"></div><div>'+esc(r.penerima)+'</div></div>'
       +'</div>';
   }
