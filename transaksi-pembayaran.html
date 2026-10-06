@@ -162,6 +162,17 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 /* Pilihan + Pembayaran & form SPPD */
 #mSppd{z-index:55}
 .pil-card{width:min(440px,100%)}
+.pkw{position:relative}.pkw .in{padding-right:46px}
+.pk-b{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--accent);transition:background .15s}
+.pk-b:hover{background:rgba(10,122,255,.12)}.pk-b svg{width:18px;height:18px}
+.cr-card{width:min(560px,100%)}
+.kw-pk{position:static;transform:none;display:inline-grid;width:22px;height:22px;margin-left:4px;vertical-align:middle;border-radius:6px}.kw-pk svg{width:14px;height:14px}
+.cr-list{margin-top:12px;max-height:min(52vh,420px);overflow-y:auto;border-radius:12px;box-shadow:inset 0 0 0 .5px var(--line);background:rgba(255,255,255,.55)}
+.cr-i{display:block;width:100%;text-align:left;padding:11px 14px;border-bottom:.5px solid var(--line);transition:background .15s}
+.cr-i:last-child{border-bottom:0}.cr-i:hover,.cr-i:focus-visible{background:rgba(10,122,255,.1)}
+.cr-i b{font-size:14px}.cr-i small{display:block;font-size:12px;color:var(--muted);line-height:1.4;margin-top:1px}
+.cr-t{display:inline-block;margin-left:8px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--track);color:var(--muted);vertical-align:1px}
+.cr-s{padding:28px 16px;text-align:center;color:var(--muted);font-size:14px}.cr-s a{color:var(--accent);font-weight:600;text-decoration:underline}
 .pil-g{display:grid;gap:10px}
 .pil-b{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;border-radius:14px;background:rgba(120,120,128,.09);box-shadow:inset 0 0 0 .5px var(--line);transition:background .15s,transform .15s}
 .pil-b:hover{background:rgba(10,122,255,.1);transform:translateY(-2px)}.pil-b:active{transform:scale(.98)}
@@ -356,6 +367,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   body.pk .sr-paper{margin:0;box-shadow:none}
   body.pk .ed{border:0!important;background:none!important}
   body.pk .ed:empty::before{content:""!important}
+  body.pk .kw-pk{display:none!important}
 }
 
 /* NOTA */
@@ -373,6 +385,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   body.pn #mNota{position:static!important;display:block!important;visibility:visible!important;background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;place-items:stretch!important;justify-items:stretch!important;align-items:stretch!important;width:100%!important}
   body.pn #mNota .nt-card{display:block!important;max-height:none!important;overflow:visible!important;width:100%!important;max-width:none!important;margin:0!important;box-shadow:none!important;background:none!important;opacity:1!important;transform:none!important;border-radius:0!important}
   body.pn .sr-tools{display:none!important}
+  body.pn .kw-pk{display:none!important}
   body.pn .sr-paper{margin:0;box-shadow:none;border:0}
   body.pn .nt-p{padding:4mm 8mm 0;font-size:13px}
   body.pn .nt-ttl{font-size:22px;margin:6px 0 12px;text-align:center}
@@ -438,6 +451,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   body.pb #mBA{position:static!important;display:block!important;visibility:visible!important;background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important}
   body.pb #mBA .sr-card{max-height:none!important;overflow:visible!important;width:auto!important;box-shadow:none!important;background:none!important;opacity:1!important;transform:none!important}
   body.pb .sr-tools{display:none!important}
+  body.pb .kw-pk{display:none!important}
   body.pb .sr-paper{margin:0;box-shadow:none}
   body.pb .sr-logo.empty{visibility:hidden}
   body.pb .ed{border:0!important;background:none!important}
@@ -584,7 +598,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       <div><label for="fRek">Kode Rekening <i>*</i></label><select class="in" id="fRek"><option value="">Pilih kode rekening</option><option>5.1.02.01.01.0024</option><option>5.1.02.01.01.0030</option><option>5.1.02.01.01.0034</option><option>5.1.02.02.01.0061</option><option>5.1.02.02.01.0063</option><option>5.2.02.10.02.0005</option></select></div>
       <div><label for="fJenis">Jenis Pembayaran <i>*</i></label><select class="in" id="fJenis"><option value="">Pilih jenis pembayaran</option><option>Belanja Alat Tulis Kantor</option><option>Belanja Alat Kebersihan</option><option>Belanja Alat Olahraga</option><option>Belanja Listrik</option><option>Belanja Internet</option><option>Belanja Modal</option><option>Belanja Pendaftaran</option><option>Belanja Jasa</option><option>Belanja Penggandaan</option><option>Belanja Habis Pakai</option></select></div>
       <div><label for="fBukti">Nomor Bukti <i>*</i></label><input class="in" id="fBukti" maxlength="50" placeholder="Contoh: BNU01"><p class="hint" id="fBuktiHint">Isi manual. Tidak boleh sama dengan nomor bukti lain.</p></div>
-      <div><label for="fPenerima">Penerima <i>*</i></label><input class="in" id="fPenerima" maxlength="100"></div>
+      <div><label for="fPenerima">Penerima <i>*</i></label><div class="pkw"><input class="in" id="fPenerima" maxlength="100"><button class="pk-b" type="button" data-pk="f" aria-label="Cari penerima" title="Cari penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div></div>
       <div class="full"><label for="fUraian">Uraian <i>*</i></label><textarea class="in" id="fUraian" rows="2"></textarea></div>
       <div><label for="fPajak">Jenis Pajak</label><select class="in" id="fPajak"><option value="">Tanpa pajak</option></select></div>
       <div><label for="fBesaran">Besaran Pajak</label><input class="in" id="fBesaran" readonly tabindex="-1" value="0%"><p class="hint">Mengikuti Informasi Pajak.</p></div>
@@ -618,6 +632,16 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   </div>
 </div>
 
+<!-- Modal daftar penerima (dari tabel penerima_pembayaran) -->
+<div class="ov" id="mCari" aria-hidden="true" style="z-index:75">
+  <div class="mcard cr-card" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+    <h2 class="mt" id="cTitle">Pilih Penerima</h2>
+    <input class="in" id="cariQ" type="search" placeholder="Cari nama, usaha/toko, NPWP, alamat, atau telepon…" aria-label="Cari penerima" autocomplete="off">
+    <div class="cr-list" id="cariList" role="listbox" aria-label="Daftar penerima"></div>
+    <div class="mfoot"><button class="btn" type="button" id="cariClose">Tutup</button></div>
+  </div>
+</div>
+
 <!-- Modal input SPPD -->
 <div class="ov" id="mSppd" aria-hidden="true">
   <form class="mcard w" id="fs" role="dialog" aria-modal="true" aria-labelledby="sTitle" novalidate autocomplete="off">
@@ -629,7 +653,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       <div><label for="sThn">Tahun Anggaran <i>*</i></label><input class="in" id="sThn" inputmode="numeric" maxlength="4" placeholder="2026"></div>
       <div class="full"><label for="sUraian">Uraian Belanja <i>*</i></label><input class="in" id="sUraian" list="dlUr" maxlength="150" placeholder="Contoh: Belanja Perjalanan Dinas"></div>
       <div class="full"><label for="sTerima">Sudah Terima Dari</label><input class="in" id="sTerima" readonly tabindex="-1"></div>
-      <div><label for="sPenerima">Penerima <i>*</i></label><input class="in" id="sPenerima" maxlength="100"></div>
+      <div><label for="sPenerima">Penerima <i>*</i></label><div class="pkw"><input class="in" id="sPenerima" maxlength="100"><button class="pk-b" type="button" data-pk="s" aria-label="Cari penerima" title="Cari penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div></div>
       <div><label for="sTempat">Tempat</label><input class="in" id="sTempat" maxlength="100"><p class="hint">Dipakai pada tanda tangan: tempat, tanggal.</p></div>
       <div class="full"><label for="sUntuk">Untuk Pengeluaran <i>*</i></label><textarea class="in" id="sUntuk" rows="2" placeholder="Contoh: Perjalanan dinas ke Dinas Pendidikan Kab. Bangka Barat"></textarea></div>
     </div>
@@ -901,6 +925,64 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
         $('tbS').innerHTML='<tr><td colspan="15" class="state">'+((e.code==='PGRST205'||e.code==='42P01')?'Tabel sppd belum ada di database.':'Gagal memuat data SPPD.')+'</td></tr>';
       });
   }
+
+  /* ===== Cari Penerima: daftar dari tabel penerima_pembayaran ===== */
+  var mcr=$('mCari'),cariRows=null,cariErr='',cariTarget='f',cariFrom=null;
+  function cariRender(){
+    var box=$('cariList'),q=String($('cariQ').value||'').trim().toLowerCase();
+    if(cariErr){box.innerHTML='<div class="cr-s">'+esc(cariErr)+'</div>';return}
+    if(cariRows===null){box.innerHTML='<div class="cr-s">Memuat data\u2026</div>';return}
+    if(!cariRows.length){box.innerHTML='<div class="cr-s">Belum ada data penerima. Tambahkan di <a href="data-penerima-pembayaran.html">Data Penerima Pembayaran</a>.</div>';return}
+    var n=0,h=cariRows.map(function(r,i){
+      if(q&&[r.nama_penerima,r.nama_usaha,r.npwp,r.alamat,r.telepon,r.no_rekening].join(' ').toLowerCase().indexOf(q)<0)return '';
+      n++;var u=r.nama_usaha&&r.nama_usaha!=='-'?'<span class="cr-t">'+esc(r.nama_usaha)+'</span>':'';
+      return '<button type="button" class="cr-i" role="option" data-i="'+i+'"><b>'+esc(r.nama_penerima)+'</b>'+u+'<small>NPWP '+esc(r.npwp)+' \u00b7 '+esc(r.telepon)+(r.no_rekening?' \u00b7 Rek. '+esc(r.no_rekening):'')+'</small><small>'+esc(r.alamat)+'</small></button>';
+    }).join('');
+    box.innerHTML=n?h:'<div class="cr-s">Tidak ada penerima yang cocok dengan pencarian.</div>';
+  }
+  function cariOpen(target,btn){
+    cariTarget=target;cariFrom=btn;cariRows=null;cariErr='';$('cariQ').value='';cariRender();
+    mcr.classList.add('open');mcr.setAttribute('aria-hidden','false');
+    setTimeout(function(){$('cariQ').focus()},200);
+    fetch(SB_URL+'/rest/v1/penerima_pembayaran?select=*&order=nama_penerima.asc',{headers:hdr()})
+      .then(function(r){return r.ok?r.json():fail(r)})
+      .then(function(a){cariRows=a||[];cariRender()})
+      .catch(function(e){cariRows=[];cariErr=(e.code==='PGRST205'||e.code==='42P01')?'Tabel penerima_pembayaran belum ada. Jalankan supabase-penerima-pembayaran.sql di SQL Editor Supabase.':'Gagal memuat data penerima: '+e.message;cariRender()});
+  }
+  function cariClose(){mcr.classList.remove('open');mcr.setAttribute('aria-hidden','true');if(cariFrom&&cariFrom.focus)cariFrom.focus()}
+  function cariFire(ids){ids.forEach(function(i){$(i).dispatchEvent(new Event('input',{bubbles:true}))})}
+  function cariPick(r){
+    if(cariTarget==='k'){
+      if(!r.no_rekening){toast('Penerima ini belum punya nomor rekening. Pilih penerima lain atau isi manual.');return}
+      var rk=$('kwPaper').querySelector('.ed-rek');
+      if(rk){rk.textContent=r.no_rekening;rk.classList.remove('bad');rk.dispatchEvent(new Event('input',{bubbles:true}))}
+      cariClose();return;
+    }
+    if(cariTarget==='n'||cariTarget==='b'){
+      /* NOTA (kolom Dari) & Berita Acara (Nama Toko): Nama Usaha; jika kosong/'-' pakai Nama Penerima */
+      var nd=(cariTarget==='n'?$('ntPaper'):$('baPaper')).querySelector(cariTarget==='n'?'.ed-nd':'.ed-bnt'),dari=r.nama_usaha&&r.nama_usaha!=='-'?r.nama_usaha:r.nama_penerima;
+      if(nd){nd.textContent=dari;nd.classList.remove('bad');nd.dispatchEvent(new Event('input',{bubbles:true}))}
+      cariClose();return;
+    }
+    if(cariTarget==='f'){
+      $('fPenerima').value=r.nama_penerima;
+      if(!$('fToko').value.trim()&&r.nama_usaha&&r.nama_usaha!=='-')$('fToko').value=r.nama_usaha;
+      if(!$('fAlamat').value.trim()&&r.alamat)$('fAlamat').value=r.alamat;
+      cariFire(['fPenerima','fToko','fAlamat']);
+    }else{
+      $('sPenerima').value=r.nama_penerima;
+      if(!$('sRek').value.trim()&&r.no_rekening)$('sRek').value=r.no_rekening;
+      cariFire(['sPenerima','sRek']);
+    }
+    cariClose();
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.pk-b');if(b)cariOpen(b.dataset.pk,b)});
+  $('cariQ').addEventListener('input',cariRender);
+  $('cariList').addEventListener('click',function(e){var b=e.target.closest('.cr-i');if(b&&cariRows)cariPick(cariRows[+b.dataset.i])});
+  $('cariClose').addEventListener('click',cariClose);
+  mcr.addEventListener('mousedown',function(e){if(e.target===mcr)cariClose()});
+  /* ESC menutup daftar penerima saja (form di bawahnya tetap terbuka) */
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mcr.classList.contains('open')){e.stopImmediatePropagation();cariClose()}},true);
 
   /* ===== Export PDF daftar (kop surat seperti Berita Acara) ===== */
   var AT_URL='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js';
@@ -1649,7 +1731,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     return '<div class="kw-hd"><div>'+PEMDA+'</div><div>'+'DINAS PENDIDIKAN , KEPEMUDAAN DAN OLAHRAGA'+'</div><div>'+esc(sek)+'</div></div>'
       +'<div class="kw-main"><div class="kw-l"><div>Lampiran : '+ed('isi lampiran','','ed-lamp')+'</div><div>Diperiksa oleh : '+ed('isi nama','','ed-per')+'</div></div>'
       +'<div class="kw-r"><div class="kw-top">'
-      +'<div><div class="kw-row"><span>No. Rekening</span><span>:</span><span>'+ed('isi no. rekening tujuan','','ed-rek')+'</span></div><div class="kw-row"><span>Uraian Belanja</span><span>:</span><span>'+esc(r.jenis_pembayaran)+'</span></div></div>'
+      +'<div><div class="kw-row"><span>No. Rekening</span><span>:</span><span>'+ed('isi no. rekening tujuan','','ed-rek')+'<button type="button" class="pk-b kw-pk" data-pk="k" contenteditable="false" aria-label="Cari penerima" title="Pilih dari data penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></span></div><div class="kw-row"><span>Uraian Belanja</span><span>:</span><span>'+esc(r.jenis_pembayaran)+'</span></div></div>'
       +'<div><div class="kw-row"><span>Tahun Anggaran</span><span>:</span><span>'+ed('isi tahun',thn,'ed-thn')+'</span></div><div class="kw-row"><span>No. BKU</span><span>:</span><span>'+esc(r.nomor_bukti)+'</span></div></div>'
       +'</div><div class="kw-ttl">K W I T A N S I</div>'
       +'<div class="kw-row"><span>Sudah terima dari</span><span>:</span><span>Bendahara BOSP '+esc(sekRaw)+'</span></div>'
@@ -1743,7 +1825,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +nrow('No. Bukti',ed('isi no. bukti',r.nomor_bukti,'ed-nb'))
       +nrow('Tanggal',ed('dd/mm/yyyy',tglSlash(r.tanggal),'ed-ntgl'))
       +nrow('Untuk',ed('isi penerima nota',sek,'ed-nu'))
-      +nrow('Dari',ed('isi nama toko / penjual',r.nama_toko,'ed-nd'))
+      +nrow('Dari',ed('isi nama toko / penjual',r.nama_toko,'ed-nd')+'<button type="button" class="pk-b kw-pk" data-pk="n" contenteditable="false" aria-label="Cari penerima" title="Pilih dari data penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>')
       +'</div><div class="nt-box"></div>';
   }
   function openNota(r){
@@ -2005,7 +2087,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +'</div>'
       +'<p class="sr-p" style="padding-bottom:2px">Yang dilaksanakan oleh Penyedia Barang/Jasa :</p>'
       +'<div class="sr-info">'
-      +'<div class="ba-r2"><span>Nama Toko</span><span>: '+esc(r.nama_toko)+'</span></div>'
+      +'<div class="ba-r2"><span>Nama Toko</span><span>: '+ed('isi nama toko',r.nama_toko,'ed-bnt')+'<button type="button" class="pk-b kw-pk" data-pk="b" contenteditable="false" aria-label="Cari penerima" title="Pilih dari data penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></span></div>'
       +'<div class="ba-r2"><span>Nama Pemilik</span><span>: '+esc(r.penerima)+'</span></div>'
       +'<div class="ba-r2"><span>Alamat</span><span>: '+ed('isi alamat toko',r.alamat_toko,'ed-balamat')+'</span></div>'
       +'</div>'
@@ -2042,7 +2124,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     });
     return {transaksi_id:r.id,nomor_order:r.nomor_order,nomor_bku:r.nomor_bukti,nomor_ba:v('.ed-nba')||null,tanggal:parseTgl(v('.ed-btgl')),tempat:TEMPAT,
       nama_sekolah:String($('navName').textContent||'').trim(),kegiatan:v('.ed-keg'),sumber_dana:v('.ed-sd'),tahun_anggaran:parseInt(v('.ed-bthn'),10),
-      nama_toko:r.nama_toko,nama_pemilik:r.penerima,alamat_toko:v('.ed-balamat'),
+      nama_toko:v('.ed-bnt'),nama_pemilik:r.penerima,alamat_toko:v('.ed-balamat'),
       nama_kepsek:identAll.nama_kepsek||null,nip_kepsek:identAll.nip||null,
       nama_bendahara:bend.nama_admin||(S&&(S.nama||S.user))||null,nip_bendahara:bend.nip||null,
       ketua_pemeriksa:v('.ed-kp'),nip_ketua_pemeriksa:v('.ed-kpn')||null,items:it};
@@ -2069,6 +2151,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     chk('.ed-keg',t('.ed-keg')!=='','Kegiatan');
     chk('.ed-sd',t('.ed-sd')!=='','Sumber Dana');
     chk('.ed-bthn',/^\d{4}$/.test(t('.ed-bthn')),t('.ed-bthn')===''?'Tahun Anggaran':'Tahun Anggaran harus 4 digit angka, mis. 2026');
+    chk('.ed-bnt',t('.ed-bnt')!=='','Nama Toko');
     chk('.ed-kp',t('.ed-kp')!=='','Nama Ketua Pemeriksa Pekerjaan');
     chk('.ed-kpn',t('.ed-kpn')!=='','NIP Ketua Pemeriksa Pekerjaan');
     if(bad.length){warn(bad,first,'Berita Acara Serah Terima');return}
