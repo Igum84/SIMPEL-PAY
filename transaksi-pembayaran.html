@@ -598,8 +598,8 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     <div class="fg2">
       <div><label for="fOrder">Nomor Order <i>*</i></label><input class="in" id="fOrder" maxlength="50" placeholder="Contoh: ORD-2026-0007"></div>
       <div><label for="fTgl">Tanggal <i>*</i></label><input class="in" id="fTgl" type="date"></div>
-      <div><label for="fRek">Kode Rekening <i>*</i></label><select class="in" id="fRek"><option value="">Pilih kode rekening</option><option>5.1.02.01.01.0024</option><option>5.1.02.01.01.0030</option><option>5.1.02.01.01.0034</option><option>5.1.02.02.01.0061</option><option>5.1.02.02.01.0063</option><option>5.2.02.10.02.0005</option></select></div>
-      <div><label for="fJenis">Jenis Pembayaran <i>*</i></label><select class="in" id="fJenis"><option value="">Pilih jenis pembayaran</option><option>Belanja Alat Tulis Kantor</option><option>Belanja Alat Kebersihan</option><option>Belanja Alat Olahraga</option><option>Belanja Listrik</option><option>Belanja Internet</option><option>Belanja Modal</option><option>Belanja Pendaftaran</option><option>Belanja Jasa</option><option>Belanja Penggandaan</option><option>Belanja Habis Pakai</option></select></div>
+      <div><label for="fRek">Kode Rekening <i>*</i></label><input class="in" id="fRek" maxlength="50" placeholder="Contoh: 5.1.02.01.01.0024"></div>
+      <div><label for="fJenis">Jenis Pembayaran <i>*</i></label><input class="in" id="fJenis" maxlength="100" placeholder="Contoh: Belanja Alat Tulis Kantor"></div>
       <div><label for="fBukti">Nomor Bukti <i>*</i></label><input class="in" id="fBukti" maxlength="50" placeholder="Contoh: BNU01"><p class="hint" id="fBuktiHint">Isi manual. Tidak boleh sama dengan nomor bukti lain.</p></div>
       <div><label for="fPenerima">Penerima <i>*</i></label><div class="pkw"><input class="in" id="fPenerima" maxlength="100"><button class="pk-b" type="button" data-pk="f" aria-label="Cari penerima" title="Cari penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div></div>
       <div class="full"><label for="fUraian">Uraian <i>*</i></label><textarea class="in" id="fUraian" rows="2"></textarea></div>
@@ -1272,7 +1272,6 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       var n=max+1;return 'BNU'+(n<10?'0'+n:n);
     });
   }
-  function ensureOpt(el,v){if(v&&![].some.call(el.options,function(o){return o.value===v||o.text===v}))el.appendChild(new Option(v,v))}
   function openForm(from_,row){
     editRow=row||null;editId=row?row.id:null;
     $('fTitle').textContent=row?'Edit Data Pembayaran':'+ Pembayaran';
@@ -1280,7 +1279,6 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     var lo=$('fPajak').querySelector('option[value="legacy"]');if(lo)lo.remove();legacy=null;
     $('iErr').classList.remove('show');$('items').innerHTML='';
     if(row){
-      ensureOpt($('fRek'),row.kode_rekening);ensureOpt($('fJenis'),row.jenis_pembayaran);
       $('fOrder').value=row.nomor_order;$('fTgl').value=row.tanggal;$('fRek').value=row.kode_rekening;$('fJenis').value=row.jenis_pembayaran;
       $('fPenerima').value=row.penerima;$('fUraian').value=row.uraian;$('fToko').value=row.nama_toko;$('fAlamat').value=row.alamat_toko||'';$('fStatus').value=row.status||'proses';
       $('fBukti').value=row.nomor_bukti;$('fBukti').readOnly=true;$('fBukti').tabIndex=-1;$('fBuktiHint').textContent='Nomor bukti tidak dapat diubah saat edit.';
@@ -1373,7 +1371,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   /* ===== Form SPPD (tabel sppd) ===== */
   var SPF=['sTgl','sRek','sThn','sUraian','sPenerima','sUntuk'],SPB=['sHarian','sTransport','sInap','sRep','sTaksi'];
   (function(){
-    var o=['Belanja Perjalanan Dinas'];[].forEach.call($('fJenis').options,function(x){if(x.value)o.push(x.value)});
+    var o=['Belanja Perjalanan Dinas','Belanja Alat Tulis Kantor','Belanja Alat Kebersihan','Belanja Alat Olahraga','Belanja Listrik','Belanja Internet','Belanja Modal','Belanja Pendaftaran','Belanja Jasa','Belanja Penggandaan','Belanja Habis Pakai'];
     $('dlUr').innerHTML=o.map(function(x){return '<option value="'+esc(x)+'">'}).join('');
   })();
   function sppdCalc(){
