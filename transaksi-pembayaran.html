@@ -87,6 +87,10 @@ tbody tr:hover{background:rgba(10,122,255,.06)}tbody tr:last-child td{border-bot
 .pct{display:inline-block;font-weight:700;color:#0a62d1;background:rgba(10,122,255,.12);padding:3px 11px;border-radius:99px}
 .lihat{font-size:13px;font-weight:600;padding:7px 14px;border-radius:9px;background:var(--accent);color:#fff;white-space:nowrap;transition:background .15s,transform .15s}
 .lihat:hover{background:#0062d6}.lihat:active{transform:scale(.96)}
+.aksi{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+.hapus{font-size:13px;font-weight:600;padding:7px 14px;border-radius:9px;background:rgba(255,69,58,.12);color:#d70015;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;transition:background .15s,color .15s,transform .15s}
+.hapus svg{width:14px;height:14px}
+.hapus:hover{background:var(--red);color:#fff}.hapus:active{transform:scale(.96)}.hapus:disabled{opacity:.5;pointer-events:none}
 .state{padding:36px 16px;text-align:center;color:var(--muted)}
 
 /* Sticky footer dock */
@@ -494,7 +498,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .ft-view iframe{display:block;width:100%;height:min(78vh,1000px);border:1px solid rgba(0,0,0,.12);border-radius:6px;background:#f2f2f4}
 .ft-view .ft-open{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;color:#0a62d1;text-decoration:underline}
 @media screen and (max-width:640px){#mFoto{padding-left:8px;padding-right:8px}.ft-card{padding:14px 16px 24px}.ft-bar{margin-bottom:18px}.ft-hd{font-size:15px}.ft-grid{gap:16px;margin-top:20px}}
-@media print{.nav,.dock,.toast,.ov,.lihat,th:last-child,td:last-child{display:none!important}body{background:#fff;padding:0}.wrap{padding:0}.panel{box-shadow:none;background:#fff}.tw{overflow:visible}table{min-width:0;font-size:9px}th,td{padding:5px 6px;color:#000}.stat{break-inside:avoid}}
+@media print{.nav,.dock,.toast,.ov,.lihat,.hapus,th:last-child,td:last-child{display:none!important}body{background:#fff;padding:0}.wrap{padding:0}.panel{box-shadow:none;background:#fff}.tw{overflow:visible}table{min-width:0;font-size:9px}th,td{padding:5px 6px;color:#000}.stat{break-inside:avoid}}
 
 /* Transisi antar halaman */
 @view-transition{navigation:auto}
@@ -598,8 +602,8 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     <div class="fg2">
       <div><label for="fOrder">Nomor Order <i>*</i></label><input class="in" id="fOrder" maxlength="50" placeholder="Contoh: ORD-2026-0007"></div>
       <div><label for="fTgl">Tanggal <i>*</i></label><input class="in" id="fTgl" type="date"></div>
-      <div><label for="fRek">Kode Rekening <i>*</i></label><input class="in" id="fRek" maxlength="50" placeholder="Contoh: 5.1.02.01.01.0024"></div>
-      <div><label for="fJenis">Jenis Pembayaran <i>*</i></label><input class="in" id="fJenis" maxlength="100" placeholder="Contoh: Belanja Alat Tulis Kantor"></div>
+      <div><label for="fRek">Kode Rekening <i>*</i></label><select class="in" id="fRek"><option value="">Pilih kode rekening</option><option>5.1.02.01.01.0024</option><option>5.1.02.01.01.0030</option><option>5.1.02.01.01.0034</option><option>5.1.02.02.01.0061</option><option>5.1.02.02.01.0063</option><option>5.2.02.10.02.0005</option></select></div>
+      <div><label for="fJenis">Jenis Pembayaran <i>*</i></label><select class="in" id="fJenis"><option value="">Pilih jenis pembayaran</option><option>Belanja Alat Tulis Kantor</option><option>Belanja Alat Kebersihan</option><option>Belanja Alat Olahraga</option><option>Belanja Listrik</option><option>Belanja Internet</option><option>Belanja Modal</option><option>Belanja Pendaftaran</option><option>Belanja Jasa</option><option>Belanja Penggandaan</option><option>Belanja Habis Pakai</option></select></div>
       <div><label for="fBukti">Nomor Bukti <i>*</i></label><input class="in" id="fBukti" maxlength="50" placeholder="Contoh: BNU01"><p class="hint" id="fBuktiHint">Isi manual. Tidak boleh sama dengan nomor bukti lain.</p></div>
       <div><label for="fPenerima">Penerima <i>*</i></label><div class="pkw"><input class="in" id="fPenerima" maxlength="100"><button class="pk-b" type="button" data-pk="f" aria-label="Cari penerima" title="Cari penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div></div>
       <div class="full"><label for="fUraian">Uraian <i>*</i></label><textarea class="in" id="fUraian" rows="2"></textarea></div>
@@ -900,7 +904,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     $('stats').innerHTML=s.map(function(x){return '<div class="panel stat"><div class="ic" style="background:'+x[5]+'">'+svg(x[4])+'</div><small>'+x[0]+'</small><b>'+x[1]+'</b><span class="delta '+x[3]+'">'+x[2]+'</span></div>'}).join('');
     var idx=trxIdx();$('cnt').textContent=(qv('qTrx')?idx.length+' dari '+total:total)+' data';
     $('tb').innerHTML=total?(!idx.length?'<tr><td colspan="13" class="state">Tidak ada data yang cocok dengan pencarian.</td></tr>':idx.map(function(i,n){var r=rows[i];
-      return '<tr><td class="num">'+(n+1)+'</td><td class="nw">'+esc(r.nomor_order)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td><span class="kode">'+esc(r.kode_rekening)+'</span></td><td>'+esc(r.jenis_pembayaran)+'</td><td class="nw">'+esc(r.nomor_bukti)+'</td><td class="uraian">'+esc(r.uraian)+'</td><td class="r num nw">'+rp(r.pengeluaran)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="nw">'+(r.jenis_pajak?esc(r.jenis_pajak):'—')+'</td><td class="r"><span class="pct">'+pf.format(r.besaran_pajak)+'%</span></td><td class="nw">'+esc(r.nama_toko)+'</td><td class="r"><button class="lihat" type="button" data-o="'+i+'">Lihat Order</button></td></tr>'}).join('')):'<tr><td colspan="13" class="state">Belum ada transaksi pembayaran. Klik <b>+ Pembayaran</b> untuk menambahkan.</td></tr>';
+      return '<tr><td class="num">'+(n+1)+'</td><td class="nw">'+esc(r.nomor_order)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td><span class="kode">'+esc(r.kode_rekening)+'</span></td><td>'+esc(r.jenis_pembayaran)+'</td><td class="nw">'+esc(r.nomor_bukti)+'</td><td class="uraian">'+esc(r.uraian)+'</td><td class="r num nw">'+rp(r.pengeluaran)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="nw">'+(r.jenis_pajak?esc(r.jenis_pajak):'—')+'</td><td class="r"><span class="pct">'+pf.format(r.besaran_pajak)+'%</span></td><td class="nw">'+esc(r.nama_toko)+'</td><td class="r"><div class="aksi"><button class="lihat" type="button" data-o="'+i+'">Lihat Order</button><button class="hapus" type="button" data-del-o="'+i+'" title="Hapus transaksi" aria-label="Hapus transaksi">'+svg('trash')+'Hapus</button></div></td></tr>'}).join('')):'<tr><td colspan="13" class="state">Belum ada transaksi pembayaran. Klik <b>+ Pembayaran</b> untuk menambahkan.</td></tr>';
   }
   function load(){
     return fetch(SB_URL+'/rest/v1/transaksi_pembayaran?select=*,transaksi_item(*)&order=tanggal.desc,id.desc',{headers:hdr()})
@@ -924,7 +928,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     $('tbS').innerHTML=a.length?(!idx.length?'<tr><td colspan="15" class="state">Tidak ada data yang cocok dengan pencarian.</td></tr>':idx.map(function(i,n){var r=a[i];
       return '<tr><td class="num">'+(n+1)+'</td><td class="nw">'+esc(r.nomor_bku)+'</td><td class="nw">'+tgl(r.tanggal)+'</td><td class="nw"><span class="kode">'+esc(r.no_rekening)+'</span></td><td class="num">'+esc(r.tahun_anggaran)+'</td><td>'+esc(r.uraian_belanja)+'</td><td class="nw">'+esc(r.penerima)+'</td><td class="uraian">'+esc(r.untuk_pengeluaran)+'</td>'
         +'<td class="r num nw">'+rp(Number(r.uang_harian))+'</td><td class="r num nw">'+rp(Number(r.biaya_transportasi))+'</td><td class="r num nw">'+rp(Number(r.biaya_penginapan))+'</td><td class="r num nw">'+rp(Number(r.uang_representatif))+'</td><td class="r num nw">'+rp(Number(r.biaya_taksi))+'</td><td class="r num nw"><b>'+rp(Number(r.jumlah))+'</b></td>'
-        +'<td class="r"><button class="lihat" type="button" data-s="'+i+'">Lihat SPPD</button></td></tr>';
+        +'<td class="r"><div class="aksi"><button class="lihat" type="button" data-s="'+i+'">Lihat SPPD</button><button class="hapus" type="button" data-del-s="'+i+'" title="Hapus SPPD" aria-label="Hapus SPPD">'+svg('trash')+'Hapus</button></div></td></tr>';
     }).join('')):'<tr><td colspan="15" class="state">Belum ada data SPPD.</td></tr>';
   }
   $('qTrx').addEventListener('input',render);
@@ -1227,6 +1231,39 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     openM(mo,b);$('oClose').focus();
   }
   $('tb').addEventListener('click',function(e){var b=e.target.closest('button[data-o]');if(b)openO(rows[b.dataset.o],b)});
+
+  /* ===== Hapus data (transaksi & SPPD) ===== */
+  function delReq(path){return fetch(SB_URL+'/rest/v1/'+path,{method:'DELETE',headers:hdr({Prefer:'return=representation'})}).then(function(r){return r.ok?r.json():fail(r)})}
+  function delSoft(path){return delReq(path).catch(function(e){if(e.code==='PGRST205'||e.code==='42P01')return [];throw e})}
+  function delNoPolicy(){toast('Data tidak terhapus. Tambahkan policy DELETE untuk tabel ini di Supabase (RLS).')}
+  function delFail(e){toast('Gagal menghapus: '+e.message)}
+  $('tb').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-del-o]');if(!b)return;
+    var r=rows[b.dataset.delO];if(!r)return;
+    if(!window.confirm('Hapus transaksi '+(r.nomor_bukti||'')+' ('+(r.nomor_order||'')+')?\n\nSemua dokumen terkait (Surat Order, Kwitansi, Nota, Berita Acara, Tanda Terima, Foto Kegiatan) juga akan dihapus. Tindakan ini tidak dapat dibatalkan.'))return;
+    b.disabled=true;
+    var q=encodeURIComponent(r.nomor_bukti),fotoPath=null;
+    fetch(SB_URL+'/rest/v1/foto_kegiatan?nomor_bukti=eq.'+q+'&select=path',{headers:hdr()})
+      .then(function(x){return x.ok?x.json():[]}).catch(function(){return []})
+      .then(function(a){fotoPath=a&&a[0]&&a[0].path;
+        return Promise.all(['surat_order','kwitansi','nota','nota_pajak','tanda_terima','berita_acara'].map(function(t){return delSoft(t+'?nomor_bku=eq.'+q)}).concat([delSoft('foto_kegiatan?nomor_bukti=eq.'+q)]))})
+      .then(function(){if(fotoPath)fetch(SB_URL+'/storage/v1/object/'+FT_BUCKET+'/'+fotoPath,{method:'DELETE',headers:hdr()}).catch(function(){})})
+      .then(function(){return delReq('transaksi_item?transaksi_id=eq.'+encodeURIComponent(r.id))})
+      .then(function(){return delReq('transaksi_pembayaran?id=eq.'+encodeURIComponent(r.id))})
+      .then(function(d){if(!d||!d.length){delNoPolicy();return}toast('Transaksi '+r.nomor_bukti+' berhasil dihapus.');return load()})
+      .catch(delFail)
+      .then(function(){b.disabled=false});
+  });
+  $('tbS').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-del-s]');if(!b)return;
+    var r=sppdRows[b.dataset.delS];if(!r)return;
+    if(!window.confirm('Hapus data SPPD '+(r.nomor_bku||'')+'?\n\nTindakan ini tidak dapat dibatalkan.'))return;
+    b.disabled=true;
+    delReq('sppd?id=eq.'+encodeURIComponent(r.id))
+      .then(function(d){if(!d||!d.length){delNoPolicy();return}toast('SPPD '+r.nomor_bku+' berhasil dihapus.');return loadSppd()})
+      .catch(delFail)
+      .then(function(){b.disabled=false});
+  });
   $('oClose').addEventListener('click',function(){closeM(mo)});
   $('oX').addEventListener('click',function(){closeM(mo)});
 
@@ -1272,6 +1309,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       var n=max+1;return 'BNU'+(n<10?'0'+n:n);
     });
   }
+  function ensureOpt(el,v){if(v&&![].some.call(el.options,function(o){return o.value===v||o.text===v}))el.appendChild(new Option(v,v))}
   function openForm(from_,row){
     editRow=row||null;editId=row?row.id:null;
     $('fTitle').textContent=row?'Edit Data Pembayaran':'+ Pembayaran';
@@ -1279,6 +1317,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     var lo=$('fPajak').querySelector('option[value="legacy"]');if(lo)lo.remove();legacy=null;
     $('iErr').classList.remove('show');$('items').innerHTML='';
     if(row){
+      ensureOpt($('fRek'),row.kode_rekening);ensureOpt($('fJenis'),row.jenis_pembayaran);
       $('fOrder').value=row.nomor_order;$('fTgl').value=row.tanggal;$('fRek').value=row.kode_rekening;$('fJenis').value=row.jenis_pembayaran;
       $('fPenerima').value=row.penerima;$('fUraian').value=row.uraian;$('fToko').value=row.nama_toko;$('fAlamat').value=row.alamat_toko||'';$('fStatus').value=row.status||'proses';
       $('fBukti').value=row.nomor_bukti;$('fBukti').readOnly=true;$('fBukti').tabIndex=-1;$('fBuktiHint').textContent='Nomor bukti tidak dapat diubah saat edit.';
@@ -1371,7 +1410,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   /* ===== Form SPPD (tabel sppd) ===== */
   var SPF=['sTgl','sRek','sThn','sUraian','sPenerima','sUntuk'],SPB=['sHarian','sTransport','sInap','sRep','sTaksi'];
   (function(){
-    var o=['Belanja Perjalanan Dinas','Belanja Alat Tulis Kantor','Belanja Alat Kebersihan','Belanja Alat Olahraga','Belanja Listrik','Belanja Internet','Belanja Modal','Belanja Pendaftaran','Belanja Jasa','Belanja Penggandaan','Belanja Habis Pakai'];
+    var o=['Belanja Perjalanan Dinas'];[].forEach.call($('fJenis').options,function(x){if(x.value)o.push(x.value)});
     $('dlUr').innerHTML=o.map(function(x){return '<option value="'+esc(x)+'">'}).join('');
   })();
   function sppdCalc(){
