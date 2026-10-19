@@ -1807,7 +1807,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +'</div></div>'
       +'<div class="kw-ft">'
       +'<div><div>Mengetahui</div><div>Ka. '+esc(sekRaw)+'</div><div class="sg"></div><div>'+ks+'</div><div>NIP. '+kn+'</div></div>'
-      +'<div><div>&nbsp;</div><div>Bendahara BOSP '+esc(sekRaw)+'</div><div class="sg"></div><div>'+bnH+'</div><div>NIP. '+bnipH+'</div></div>'
+      +'<div><div>&nbsp;</div><div>Bendahara</div><div class="sg"></div><div>'+bnH+'</div><div>NIP. '+bnipH+'</div></div>'
       +'<div><div>'+TEMPAT+', '+tg+'</div><div>Penyedia / Penerima</div><div class="sg"></div><div>'+esc(r.penerima)+'</div></div>'
       +'</div>';
   }
@@ -2038,7 +2038,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     o+=tA(372.65,321.4,'Total Terima')+tA(456.8,321,'Rp')+tR(556.4,321,acct(h.b),10,90);
     o+=tA(82.8,347.3,'Mengetahui,',{s:8.6})+tA(80.3,359.8,'Ka. '+esc(sekRaw),{s:8.6})+tA(80.3,447.2,ks,{s:8.6})+tA(80.4,458.9,'NIP. '+kn);
     o+=tC(564.4,346.5,'<span style="font-size:8.6pt">'+esc(TEMPAT)+',</span> <span class="tt-kt">'+esc(tglPanjang(r.tanggal))+'</span>')
-      +tC(563.9,359.8,'Bendahara BOSP '+esc(sekRaw),8.6)+tC(563.9,446.4,bnH,10)+tC(563.9,458.9,'NIP. '+bnipH,10);
+      +tC(563.9,359.8,'Bendahara',8.6)+tC(563.9,446.4,bnH,10)+tC(563.9,458.9,'NIP. '+bnipH,10);
     return o;
   }
   /* Nilai turunan (tanggal & no. bukti di kotak, tanggal tanda tangan) ikut isian atas */
