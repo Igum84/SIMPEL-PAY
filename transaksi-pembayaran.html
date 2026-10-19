@@ -2284,7 +2284,8 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   $('baPaper').addEventListener('keydown',function(e){if(e.target.classList.contains('ed')&&e.key==='Enter'){e.preventDefault();e.target.blur()}});
 
   /* ===== Surat Hasil Pemeriksaan (cetak saja, tanpa tabel baru) ===== */
-  function buildSHP(r){
+  function buildSHP(r,sv){
+    sv=sv||{};var svi={};(Array.isArray(sv.items)?sv.items:[]).forEach(function(x){svi[x.nomor_urut]=x});
     var sek=String($('navName').textContent||'').trim();
     var it=(r.transaksi_item||[]).slice().sort(function(a,b){return a.nomor_urut-b.nomor_urut});
     var a=String(r.tanggal).split('-'),hari=hariDari(r.tanggal),tp=tglPanjang(r.tanggal);
@@ -2294,16 +2295,16 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     var sekN=String(identAll.nama_sekolah||sek).trim();
     var wil=[identAll.kelurahan,pre(identAll.kecamatan,'Kec.'),pre(identAll.kabupaten,'Kab.'),pre(identAll.provinsi,'Prov.')].filter(function(x){return x&&String(x).trim()}).join(', ');
     var almKop=[identAll.jalan,wil,identAll.kode_pos].filter(function(x){return x&&String(x).trim()}).join(', ');
-    var rows=it.map(function(x){return '<tr><td class="c">'+x.nomor_urut+'</td><td>'+esc(x.nama_barang)+'</td><td class="c">'+pf.format(x.volume)+'</td><td>'+ed('spesifikasi','Sesuai','ed-spes')+'</td><td>'+ed('kondisi','Baik','ed-kond')+'</td></tr>'}).join('');
+    var rows=it.map(function(x){return '<tr><td class="c">'+x.nomor_urut+'</td><td>'+esc(x.nama_barang)+'</td><td class="c">'+pf.format(x.volume)+'</td><td>'+ed('spesifikasi',(svi[x.nomor_urut]&&svi[x.nomor_urut].spesifikasi!=null)?svi[x.nomor_urut].spesifikasi:'Sesuai','ed-spes')+'</td><td>'+ed('kondisi',(svi[x.nomor_urut]&&svi[x.nomor_urut].kondisi!=null)?svi[x.nomor_urut].kondisi:'Baik','ed-kond')+'</td></tr>'}).join('');
     function row(l,v){return '<div class="shp-r"><span>'+l+'</span><span>:</span><span>'+v+'</span></div>'}
     return '<div class="shp-kop">'+logoImg('l')+'<div class="shp-kt"><div>'+PEMDA+'</div><div>UNIT PELAKSANA TEKNIS DINAS SATUAN PENDIDIKAN</div><div>'+esc(sekN.toUpperCase())+'</div></div>'+logoImg('r')+'</div>'
       +'<div class="shp-al">'+(almKop?esc(almKop):miss('(alamat belum diisi — lengkapi di Identitas Sekolah)'))+'</div><hr class="shp-hr">'
-      +'<div class="shp-ttl"><div class="t">SURAT HASIL PEMERIKSAAN</div><div class="n">NO: '+ed('isi nomor','','ed-shpno')+'/SHP/'+esc(r.nomor_order)+'</div></div>'
+      +'<div class="shp-ttl"><div class="t">SURAT HASIL PEMERIKSAAN</div><div class="n">NO: '+ed('isi nomor',sv.nomor_shp||'','ed-shpno')+'/SHP/'+esc(r.nomor_order)+'</div></div>'
       +'<p>Pada hari ini, <b>'+hari+' tanggal '+(+a[2])+' bulan '+BLN[+a[1]-1]+' tahun '+a[0]+'</b>, sesuai dengan:</p>'
       +'<div class="shp-blk">'
       +row('Nomor Surat Pesanan',esc(r.nomor_order))
       +row('Tanggal',hari+', '+tp)
-      +row('Nama Pekerjaan',ed('nama pekerjaan','Pengadaan Barang/Jasa di Sekolah','ed-shpkrj'))
+      +row('Nama Pekerjaan',ed('nama pekerjaan',sv.nama_pekerjaan||'Pengadaan Barang/Jasa di Sekolah','ed-shpkrj'))
       +row('Tahun',a[0])
       +'</div>'
       +'<p>Yang bertandatangan di bawah ini:</p>'
@@ -2311,13 +2312,13 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +row('Nama',ks)
       +row('Jabatan','Kepala Sekolah')
       +row('Nama Satuan Pendidikan',esc(sekN))
-      +row('Alamat Satuan Pendidikan',ed('isi alamat sekolah',wil,'ed-shpalm'))
-      +row('No. Telepon',ed('isi no. telepon',identAll.telepon||'','ed-shptel'))
+      +row('Alamat Satuan Pendidikan',ed('isi alamat sekolah',sv.alamat_sekolah||wil,'ed-shpalm'))
+      +row('No. Telepon',ed('isi no. telepon',sv.telepon_sekolah||identAll.telepon||'','ed-shptel'))
       +'</div>'
       +'<p class="ind">Telah melakukan pemeriksaan terhadap hasil pekerjaan sesuai dengan pesanan yang dimaksud pada <b>Rincian Pekerjaan</b>. Demikian Surat Pemeriksaan Hasil Pekerjaan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana seharusnya.</p>'
       +'<div class="shp-sg">'
-      +'<div><div>&nbsp;</div><div>PIHAK PERTAMA</div><div class="sp"></div><div><b>'+esc(r.penerima)+'</b></div><div>'+ed('isi jabatan','Direktur','ed-shpjab')+'</div></div>'
-      +'<div><div>'+ed('isi tempat','Kab. Bangka Barat','ed-shptmp')+', '+tp+'</div><div>PIHAK KEDUA</div><div class="sp"></div><div><b>'+ks+'</b></div><div>NIP. '+kn+'</div></div>'
+      +'<div><div>&nbsp;</div><div>PIHAK PERTAMA</div><div class="sp"></div><div><b>'+esc(r.penerima)+'</b></div><div>'+ed('isi jabatan',sv.jabatan_pihak_pertama||'Direktur','ed-shpjab')+'</div></div>'
+      +'<div><div>'+ed('isi tempat',sv.tempat||'Kab. Bangka Barat','ed-shptmp')+', '+tp+'</div><div>PIHAK KEDUA</div><div class="sp"></div><div><b>'+ks+'</b></div><div>NIP. '+kn+'</div></div>'
       +'</div>'
       +'<p style="margin-bottom:4px"><b>Rincian Pekerjaan:</b></p>'
       +'<table class="shp-t"><colgroup><col style="width:42px"><col><col style="width:84px"><col style="width:130px"><col style="width:110px"></colgroup>'
@@ -2325,8 +2326,13 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
   }
   var mshp=$('mSHP'),shpRow=null;
   function openSHP(r){
-    shpRow=r;loadIdentAll().then(function(){
-      $('shpPaper').innerHTML=buildSHP(r);mshp.classList.add('open');mshp.setAttribute('aria-hidden','false');mshp.querySelector('.sr-card').scrollTop=0;$('shpPrint').focus();
+    shpRow=r;
+    /* Bila sudah tersimpan di tabel surat_hasil_pemeriksaan (per Nomor BKU / surat order), tampilkan datanya */
+    var ld=fetch(SB_URL+'/rest/v1/surat_hasil_pemeriksaan?nomor_bku=eq.'+encodeURIComponent(r.nomor_bukti)+'&select=*&limit=1',{headers:hdr()})
+      .then(function(x){return x.ok?x.json():[]}).then(function(a){return (a&&a[0])||null}).catch(function(){return null});
+    Promise.all([loadIdentAll(),ld]).then(function(res){
+      var sv=res[1];
+      $('shpPaper').innerHTML=buildSHP(r,sv);mshp.classList.add('open');mshp.setAttribute('aria-hidden','false');mshp.querySelector('.sr-card').scrollTop=0;$('shpPrint').focus();
     });
   }
   function closeSHP(){mshp.classList.remove('open');mshp.setAttribute('aria-hidden','true');db.focus()}
@@ -2348,13 +2354,17 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       items:it.map(function(x,i){return {nomor_urut:x.nomor_urut,nama_barang:x.nama_barang,jumlah:Number(x.volume),
         spesifikasi:sp[i]?sp[i].textContent.trim():'',kondisi:kd[i]?kd[i].textContent.trim():''}})};
   }
-  /* Simpan ke tabel surat_hasil_pemeriksaan; bila Nomor BKU sudah ada, jangan input lagi */
+  /* Simpan ke tabel surat_hasil_pemeriksaan; bila Nomor BKU sudah ada, perbarui barisnya */
   function saveSHP(r){
     var d=shpPayload(r),ok=function(x){return x.ok?x:fail(x)};
     return fetch(SB_URL+'/rest/v1/surat_hasil_pemeriksaan?nomor_bku=eq.'+encodeURIComponent(r.nomor_bukti)+'&select=id&limit=1',{headers:hdr()})
       .then(ok).then(function(x){return x.json()})
       .then(function(a){
-        if(a&&a.length)return 'ada';
+        if(a&&a.length){
+          var u=shpPayload(r);delete u.transaksi_id;delete u.nomor_bku;u.updated_at=new Date().toISOString();
+          return fetch(SB_URL+'/rest/v1/surat_hasil_pemeriksaan?nomor_bku=eq.'+encodeURIComponent(r.nomor_bukti),{method:'PATCH',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(u)})
+            .then(function(x){return x.ok?'update':fail(x)});
+        }
         return fetch(SB_URL+'/rest/v1/surat_hasil_pemeriksaan',{method:'POST',headers:hdr({'Content-Type':'application/json',Prefer:'return=minimal'}),body:JSON.stringify(d)})
           .then(function(x){return x.ok?'baru':fail(x)})
           .catch(function(err){if(err.code==='23505')return 'ada';throw err});
@@ -2366,7 +2376,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
     no.classList.toggle('bad',!ok);
     if(!ok){warn(['Nomor'],no,'Surat Hasil Pemeriksaan');return}
     shpBusy=true;var b=this;b.disabled=true;b.textContent='Menyimpan…';
-    saveSHP(shpRow).then(function(h){toast(h==='ada'?'Nomor BKU '+shpRow.nomor_bukti+' sudah tersimpan, tidak diinput ulang.':'Surat Hasil Pemeriksaan tersimpan.')})
+    saveSHP(shpRow).then(function(h){toast(h==='update'?'Surat Hasil Pemeriksaan diperbarui.':h==='ada'?'Nomor BKU '+shpRow.nomor_bukti+' sudah tersimpan oleh pengguna lain.':'Surat Hasil Pemeriksaan tersimpan.')})
       .catch(function(err){
         if(err.code==='PGRST205'||err.code==='42P01'||/surat_hasil_pemeriksaan/.test(err.message))toast('Tabel surat_hasil_pemeriksaan belum ada. Jalankan supabase-surat-hasil-pemeriksaan.sql dulu.');
         else toast('Gagal menyimpan Surat Hasil Pemeriksaan: '+err.message);
