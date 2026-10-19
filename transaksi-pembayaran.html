@@ -1799,7 +1799,7 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +'<div><div class="kw-row"><span>No. Rekening</span><span>:</span><span>'+ed('isi no. rekening tujuan','','ed-rek')+'<button type="button" class="pk-b kw-pk" data-pk="k" contenteditable="false" aria-label="Cari penerima" title="Pilih dari data penerima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></span></div><div class="kw-row"><span>Uraian Belanja</span><span>:</span><span>'+esc(r.jenis_pembayaran)+'</span></div></div>'
       +'<div><div class="kw-row"><span>Tahun Anggaran</span><span>:</span><span>'+ed('isi tahun',thn,'ed-thn')+'</span></div><div class="kw-row"><span>No. BKU</span><span>:</span><span>'+esc(r.nomor_bukti)+'</span></div></div>'
       +'</div><div class="kw-ttl">K W I T A N S I</div>'
-      +'<div class="kw-row"><span>Sudah terima dari</span><span>:</span><span>Bendahara BOSP '+esc(sekRaw)+'</span></div>'
+      +'<div class="kw-row"><span>Sudah terima dari</span><span>:</span><span>Bendahara</span></div>'
       +'<div class="kw-row"><span>Banyaknya uang</span><span>:</span><span><i>'+esc(terbilang(r.pengeluaran))+'</i></span></div>'
       +'<div class="kw-row" style="margin-top:12px"><span>Yaitu untuk</span><span>:</span><span>'+esc(r.uraian)+' kepada '+esc(r.penerima)+' untuk kegiatan tanggal '+tg+'</span></div>'
       +'<div class="kw-sp"></div>'
@@ -2162,8 +2162,8 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
       +'<p class="sr-p">Demikian Berita Acara Penerimaan serta Pemeriksaan ini dibuat untuk dipergunakan sebagaimana mestinya.</p>'
       +'<div class="ba-ft">'
       +'<div><div>Kepala Sekolah</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+ks+'</div><div>NIP. '+kn+'</div></div>'
-      +'<div><div>Bendahara BOSP</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+bnH+'</div><div>NIP. '+bnipH+'</div></div>'
-      +'<div><div>Ketua Pemeriksa Pekerjaan</div><div>'+esc(sek)+'</div><div class="sg"></div><div>'+ed('isi nama ketua pemeriksa','','ed-kp')+'<button type="button" class="ttd-b" data-ttd="kp" contenteditable="false" aria-label="Cari penanda tangan" title="Pilih dari data penanda tangan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div><div>NIP. '+ed('isi NIP','','ed-kpn')+'</div></div>'
+      +'<div><div>Bendahara</div><div>&nbsp;</div><div class="sg"></div><div>'+bnH+'</div><div>NIP. '+bnipH+'</div></div>'
+      +'<div><div>Ketua Pemeriksa</div><div>&nbsp;</div><div class="sg"></div><div>'+ed('isi nama ketua pemeriksa','','ed-kp')+'<button type="button" class="ttd-b" data-ttd="kp" contenteditable="false" aria-label="Cari penanda tangan" title="Pilih dari data penanda tangan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></div><div>NIP. '+ed('isi NIP','','ed-kpn')+'</div></div>'
       +'<div><div>Penyedia Barang dan Jasa</div><div>&nbsp;</div><div class="sg"></div><div>'+esc(r.penerima)+'</div></div>'
       +'</div>';
   }
