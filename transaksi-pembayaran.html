@@ -246,13 +246,16 @@ textarea.in{resize:vertical;min-height:72px;line-height:1.45}
 .tt-a{position:absolute;white-space:nowrap;pointer-events:none;font-size:10pt}
 .tt-a .ed{pointer-events:auto}
 .tt-v{white-space:normal;overflow:hidden;max-height:12.5pt;word-break:break-word}
-.tt-ln{position:absolute;background:#000}
+.tt-ln{position:absolute;background:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{
   body.ptt{padding:0!important;min-height:0!important;background:#fff!important}
   body.ptt>*:not(#mTT){display:none!important}
   body.ptt #mTT{position:static!important;display:block!important;visibility:visible!important;background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;place-items:stretch!important;width:100%!important}
   body.ptt #mTT .tt-card{display:block!important;max-height:none!important;overflow:visible!important;width:792pt!important;max-width:none!important;margin:0!important;box-shadow:none!important;background:none!important;opacity:1!important;transform:none!important;border-radius:0!important;padding:0!important}
   body.ptt .sr-tools{display:none!important}
+  /* Garis dibuat dari div berlatar hitam: paksa background ikut tercetak */
+  body.ptt,body.ptt .tt-p,body.ptt .tt-p *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body.ptt .tt-ln{background:#000!important}
   body.ptt .tt-wrap{width:792pt!important;height:611pt!important;margin:0!important;overflow:hidden!important}
   body.ptt .tt-p{transform:none!important;margin:0!important;border:0!important;box-shadow:none!important}
   body.ptt .ed{border:0!important;background:none!important;padding:0!important;display:inline!important}
