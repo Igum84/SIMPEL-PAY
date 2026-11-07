@@ -55,7 +55,7 @@ h1{font-size:clamp(26px,4.5vw,36px);letter-spacing:-.025em;line-height:1.1}
 .stat .ic svg{width:18px;height:18px}
 .stat small{color:var(--muted);font-size:13px}
 .stat b{display:block;font-size:clamp(20px,2.6vw,26px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.delta{font-size:12px;font-weight:600}.up{color:#1fa23c}.down{color:var(--red)}
+.delta{font-size:12px;font-weight:600}.up{color:#1fa23c}.down{color:var(--red)}.mid{color:#b86e00}
 @media (prefers-color-scheme:dark){.up{color:#5be37a}}
 
 .charts{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
@@ -161,8 +161,8 @@ html,body{overflow-x:hidden}
   </div>
   <span class="sp"></span>
   <div class="acct" aria-label="Akun masuk">
-    <div><b>Budi Santoso</b><small>Admin Utama</small></div>
-    <span class="avatar">BS</span>
+    <div><b id="acName">Budi Santoso</b><small>Admin Utama</small></div>
+    <span class="avatar" id="acAva">BS</span>
   </div>
 </header>
 
@@ -222,11 +222,17 @@ html,body{overflow-x:hidden}
   var SB_URL='https://ddlfgiyprgotslwolgrt.supabase.co';
   var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkbGZnaXlwcmdvdHNsd29sZ3J0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMDQ4MTQsImV4cCI6MjEwNjY4MDgxNH0.ESxAhJvTsvfrJJ1Hg5xshCzUn2ZSgiXj_4j6afDIvAc';
   var CK='simpelpay_nav_sekolah';
-  var logoEl=document.getElementById('navLogo'),nameEl=document.getElementById('navName'),subEl=document.getElementById('navSub');
+  var logoEl=document.getElementById('navLogo'),nameEl=document.getElementById('navName'),subEl=document.getElementById('navSub'),acName=document.getElementById('acName'),acAva=document.getElementById('acAva');
   var dummyLogo=logoEl.innerHTML;
   function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  /* Inisial avatar dari nama kepala sekolah (abaikan gelar depan & belakang) */
+  function inisial(n){
+    var s=String(n||'').split(',')[0].trim().split(/\s+/).filter(function(w){return w&&!/^(dr|drs|dra|ir|prof|h|hj|ns)\.?$/i.test(w)});
+    return ((s[0]||'').charAt(0)+(s[1]||'').charAt(0)).toUpperCase()||'?'
+  }
   function apply(d){
     if(!d)return;
+    if(d.kepsek){acName.textContent=d.kepsek;acAva.textContent=inisial(d.kepsek)}
     if(d.nama)nameEl.textContent=d.nama;
     subEl.textContent=d.sub||'';
     if(d.logo){
@@ -238,12 +244,12 @@ html,body{overflow-x:hidden}
   }
   /* Tampilkan cache dulu agar tidak berkedip, lalu perbarui dari server */
   try{apply(JSON.parse(localStorage.getItem(CK)||'null'))}catch(e){}
-  fetch(SB_URL+'/rest/v1/identitas_sekolah?id=eq.1&select=nama_sekolah,kabupaten,provinsi,logo_url,updated_at',
+  fetch(SB_URL+'/rest/v1/identitas_sekolah?id=eq.1&select=nama_sekolah,kabupaten,provinsi,logo_url,updated_at,nama_kepsek',
     {headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
     .then(function(r){return r.ok?r.json():Promise.reject(r.status)})
     .then(function(rows){
       var r=rows&&rows[0];if(!r)return;
-      var d={nama:r.nama_sekolah,sub:[r.kabupaten,r.provinsi].filter(Boolean).join(', '),
+      var d={kepsek:r.nama_kepsek||'',nama:r.nama_sekolah,sub:[r.kabupaten,r.provinsi].filter(Boolean).join(', '),
              logo:r.logo_url?r.logo_url+'?v='+encodeURIComponent(r.updated_at||''):''};
       apply(d);
       try{localStorage.setItem(CK,JSON.stringify(d))}catch(e){}
@@ -272,45 +278,93 @@ html,body{overflow-x:hidden}
   document.querySelectorAll('[data-i]').forEach(function(e){e.innerHTML=svg(e.dataset.i);});
   var rp=function(n){return 'Rp '+n.toLocaleString('id-ID');};
 
-  /* Data contoh (dummy) — ganti dengan data asli dari server */
+  /* ===== Data asli dari tabel transaksi_pembayaran (sama dengan halaman Transaksi Pembayaran) ===== */
+  var SB_URL='https://ddlfgiyprgotslwolgrt.supabase.co';
+  var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkbGZnaXlwcmdvdHNsd29sZ3J0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTExMDQ4MTQsImV4cCI6MjEwNjY4MDgxNH0.ESxAhJvTsvfrJJ1Hg5xshCzUn2ZSgiXj_4j6afDIvAc';
   var bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  var cur=[42,38,55,47,61,52,70,58,66,34,0,0];
-  var prev=[35,40,44,50,48,57,62,55,60,64,58,72];
-  var jenis=[['Kegiatan siswa',38,'#0a7aff'],['Operasional',27,'#28c840'],['Sarana & prasarana',21,'#ff9f0a'],['Honor & jasa',14,'#af52de']];
-  var tot=cur.reduce(function(a,b){return a+b;},0)*1e6;
+  var warna=['#0a7aff','#28c840','#ff9f0a','#af52de','#8e8e93'];
+  var $=function(i){return document.getElementById(i)};
+  function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function nilai(r){return Number(r.pengeluaran)||0}
+  function ymd(d){var a=String(d||'').split('-');return {y:+a[0]||0,m:+a[1]||0,d:+a[2]||0}}
+  function tglId(d){var q=ymd(d);return q.m?q.d+' '+bulan[q.m-1]+' '+q.y:'—'}
+  function nf1(n){return n.toLocaleString('id-ID',{maximumFractionDigits:1})}
+  function delta(a,b,ket){
+    if(!b)return [a>0?'Belum ada data pembanding':ket.kosong,'mid'];
+    var p=(a-b)/b*100;return [(p>=0?'+':'-')+nf1(Math.abs(p))+'% '+ket.teks,p>=0?'up':'down'];
+  }
+  function nice(x){if(x<=0)return 10;var p=Math.pow(10,Math.floor(Math.log10(x))),n=x/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+  function animate(){requestAnimationFrame(function(){requestAnimationFrame(function(){
+    document.querySelectorAll('.b').forEach(function(b){b.style.height=b.dataset.h+'%'});
+    document.querySelectorAll('.fill').forEach(function(f){f.style.width=f.dataset.w+'%'});
+  })})}
+  function pesan(m){
+    $('stats').innerHTML='<div class="panel stat"><small>'+esc(m)+'</small></div>';
+    $('vchart').innerHTML='<p class="sub" style="margin:auto">'+esc(m)+'</p>';
+    $('hchart').innerHTML='<p class="sub">'+esc(m)+'</p>';
+    $('recent').innerHTML='<p class="sub" style="padding:12px 0">'+esc(m)+'</p>';
+  }
 
-  /* Kartu statistik */
-  var s=[
-    ['Total pembayaran',rp(tot),'+12,4% dari tahun lalu','up','wallet','linear-gradient(160deg,#4da3ff,#0a5fe0)'],
-    ['Bulan ini (Okt)',rp(34e6),'-47% dari bulan lalu','down','chart','linear-gradient(160deg,#ffb454,#f0780a)'],
-    ['Jumlah transaksi','1.284','+86 bulan ini','up','list','linear-gradient(160deg,#5be37a,#1fa23c)'],
-    ['Menunggu verifikasi','12','Perlu dicek bendahara','down','doc','linear-gradient(160deg,#c084fc,#7c3aed)']
-  ];
-  document.getElementById('stats').innerHTML=s.map(function(x){
-    return '<div class="panel stat"><div class="ic" style="background:'+x[5]+'">'+svg(x[4])+'</div><small>'+x[0]+'</small><b>'+x[1]+'</b><span class="delta '+x[3]+'">'+x[2]+'</span></div>';}).join('');
+  function tampil(rows){
+    var now=new Date(),Y=now.getFullYear(),M=now.getMonth();
+    $('period').textContent='Tahun '+Y;
+    var cur=[],prev=[],i;for(i=0;i<12;i++){cur.push(0);prev.push(0)}
+    var thn=[],proses=0,cntBln=0;
+    rows.forEach(function(r){
+      var q=ymd(r.tanggal);if(!q.m)return;
+      if(q.y===Y){cur[q.m-1]+=nilai(r);thn.push(r);if(r.status!=='selesai')proses++;if(q.m-1===M)cntBln++}
+      else if(q.y===Y-1)prev[q.m-1]+=nilai(r);
+    });
+    var tot=cur.reduce(function(a,b){return a+b},0);
+    var prevYtd=prev.slice(0,M+1).reduce(function(a,b){return a+b},0);
+    var bulanLalu=M>0?cur[M-1]:prev[11];
 
-  /* Grafik batang vertikal */
-  var max=80,v=document.getElementById('vchart');
-  var h='<span class="yl" style="bottom:22px">0</span><span class="yl" style="bottom:calc(22px + (100% - 22px)*.5)">40</span><span class="yl" style="bottom:calc(100% - 4px)">80</span>';
-  bulan.forEach(function(m,i){
-    h+='<div class="col" tabindex="0"><div class="tip">'+m+': Rp '+cur[i]+' jt · lalu Rp '+prev[i]+' jt</div><div class="pair"><div class="b prev" data-h="'+(prev[i]/max*100)+'"></div><div class="b cur" data-h="'+(cur[i]/max*100)+'"></div></div><span>'+m+'</span></div>';
-  });
-  v.innerHTML=h;
+    /* Kartu statistik */
+    var d1=delta(tot,prevYtd,{teks:'dari periode sama tahun lalu',kosong:'Belum ada pembayaran'});
+    var d2=delta(cur[M],bulanLalu,{teks:'dari bulan lalu',kosong:'Belum ada pembayaran'});
+    var s=[
+      ['Total pembayaran',rp(tot),d1[0],d1[1],'wallet','linear-gradient(160deg,#4da3ff,#0a5fe0)'],
+      ['Bulan ini ('+bulan[M]+')',rp(cur[M]),d2[0],d2[1],'chart','linear-gradient(160deg,#ffb454,#f0780a)'],
+      ['Jumlah transaksi',thn.length.toLocaleString('id-ID'),'+'+cntBln.toLocaleString('id-ID')+' bulan ini','up','list','linear-gradient(160deg,#5be37a,#1fa23c)'],
+      ['Masih diproses',proses.toLocaleString('id-ID'),proses?'Perlu diselesaikan':'Semua sudah selesai',proses?'mid':'up','doc','linear-gradient(160deg,#c084fc,#7c3aed)']
+    ];
+    $('stats').innerHTML=s.map(function(x){
+      return '<div class="panel stat"><div class="ic" style="background:'+x[5]+'">'+svg(x[4])+'</div><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b><span class="delta '+x[3]+'">'+esc(x[2])+'</span></div>'}).join('');
 
-  /* Grafik batang horizontal */
-  document.getElementById('hchart').innerHTML=jenis.map(function(j){
-    return '<div class="hrow"><div class="l"><span>'+j[0]+'</span><b>'+j[1]+'%</b></div><div class="track"><div class="fill" data-w="'+j[1]+'" style="background:'+j[2]+'"></div></div></div>';}).join('')
-    +'<p class="sub" style="margin:4px 0 0">Kegiatan siswa menjadi pengeluaran terbesar.</p>';
+    /* Grafik batang vertikal (juta rupiah) */
+    document.querySelector('.legend').innerHTML='<span><i style="background:#2b86f0"></i>'+Y+'</span><span><i style="background:#b79af2"></i>'+(Y-1)+'</span>';
+    $('vchart').setAttribute('aria-label','Grafik batang pembayaran bulanan '+Y+' dibanding '+(Y-1));
+    var mx=nice(Math.max.apply(null,cur.concat(prev))/1e6);
+    var h='<span class="yl" style="bottom:22px">0</span><span class="yl" style="bottom:calc(22px + (100% - 22px)*.5)">'+nf1(mx/2)+'</span><span class="yl" style="bottom:calc(100% - 4px)">'+nf1(mx)+'</span>';
+    bulan.forEach(function(m,k){
+      var c=cur[k]/1e6,pv=prev[k]/1e6;
+      h+='<div class="col" tabindex="0"><div class="tip">'+m+': Rp '+nf1(c)+' jt · lalu Rp '+nf1(pv)+' jt</div><div class="pair"><div class="b prev" data-h="'+(pv/mx*100)+'"></div><div class="b cur" data-h="'+(c/mx*100)+'"></div></div><span>'+m+'</span></div>';
+    });
+    $('vchart').innerHTML=h;
 
-  requestAnimationFrame(function(){requestAnimationFrame(function(){
-    document.querySelectorAll('.b').forEach(function(b){b.style.height=b.dataset.h+'%';});
-    document.querySelectorAll('.fill').forEach(function(f){f.style.width=f.dataset.w+'%';});
-  });});
+    /* Grafik batang horizontal: porsi per jenis pembayaran */
+    var g={};thn.forEach(function(r){var k=String(r.jenis_pembayaran||'').trim()||'Lainnya';g[k]=(g[k]||0)+nilai(r)});
+    var arr=Object.keys(g).map(function(k){return [k,g[k]]}).sort(function(a,b){return b[1]-a[1]});
+    if(arr.length>5){var sisa=arr.slice(4).reduce(function(a,b){return a+b[1]},0);arr=arr.slice(0,4).concat([['Lainnya',sisa]])}
+    var jColor={};arr.forEach(function(j,k){jColor[j[0]]=warna[k%warna.length]});
+    $('hchart').innerHTML=arr.length&&tot>0?arr.map(function(j,k){var pc=j[1]/tot*100;
+      return '<div class="hrow"><div class="l"><span>'+esc(j[0])+'</span><b>'+nf1(pc)+'%</b></div><div class="track"><div class="fill" data-w="'+pc+'" style="background:'+warna[k%warna.length]+'"></div></div></div>'}).join('')
+      +'<p class="sub" style="margin:4px 0 0">'+esc(arr[0][0])+' menjadi pengeluaran terbesar.</p>'
+      :'<p class="sub">Belum ada pembayaran tahun ini.</p>';
 
-  /* Transaksi terbaru */
-  var t=[['Pembayaran kegiatan Pramuka','2 Okt 2026',1250000,'pay','#0a7aff'],['Honor narasumber workshop','1 Okt 2026',900000,'admin','#af52de'],['Perbaikan ruang kelas','30 Sep 2026',4800000,'school','#ff9f0a'],['Konsumsi rapat guru','29 Sep 2026',350000,'wallet','#28c840']];
-  document.getElementById('recent').innerHTML=t.map(function(x){
-    return '<div class="tx"><span class="dot" style="background:'+x[4]+'">'+svg(x[3])+'</span><span class="m"><b>'+x[0]+'</b><small>'+x[1]+'</small></span><span class="amt">'+rp(x[2])+'</span></div>';}).join('');
+    /* Transaksi terbaru */
+    $('recent').innerHTML=rows.length?rows.slice(0,5).map(function(r){
+      var jn=String(r.jenis_pembayaran||'').trim()||'Lainnya';
+      return '<div class="tx"><span class="dot" style="background:'+(jColor[jn]||warna[4])+'">'+svg('pay')+'</span><span class="m"><b>'+esc(r.uraian||jn)+'</b><small>'+tglId(r.tanggal)+(r.nomor_bukti?' · '+esc(r.nomor_bukti):'')+'</small></span><span class="amt">'+rp(nilai(r))+'</span></div>'}).join('')
+      :'<p class="sub" style="padding:12px 0">Belum ada transaksi pembayaran.</p>';
+    animate();
+  }
+
+  pesan('Memuat data…');
+  fetch(SB_URL+'/rest/v1/transaksi_pembayaran?select=id,tanggal,pengeluaran,status,jenis_pembayaran,uraian,nomor_bukti&order=tanggal.desc,id.desc',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+    .then(function(r){return r.ok?r.json():Promise.reject(r.status)})
+    .then(function(a){tampil(a||[])})
+    .catch(function(){pesan('Gagal memuat data transaksi.')});
 
   /* Menu sistem */
   var M=[['Identitas Sekolah','school','#0a7aff','identitas-sekolah.html'],['Pengaturan Pajak','tax','#ff9f0a','pengaturan-pajak.html'],['Pengaturan Admin','admin','#8e8e93','pengaturan-admin.html'],['Penanda Tangan','sign','#af52de','penanda-tangan.html'],['Back Up & Reset','backup','#ff453a','backup-reset.html'],['Restore','restore','#32ade6','restore.html']];
