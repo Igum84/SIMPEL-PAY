@@ -116,7 +116,7 @@ html,body{overflow-x:hidden}
     <span class="sch-name"><b id="navName">SMP Negeri 1 Contoh</b><small id="navSub">Kab. Contoh, Prov. Contoh</small></span>
   </div>
   <span class="sp"></span>
-  <div class="acct"><div><b>Budi Santoso</b><small>Admin Utama</small></div><span class="avatar">BS</span></div>
+  <div class="acct"><div><b id="acName">Budi Santoso</b><small>Admin Utama</small></div><span class="avatar" id="acAva">BS</span></div>
 </header>
 
 <main class="wrap">
@@ -280,7 +280,14 @@ html,body{overflow-x:hidden}
   }
 
   /* ===== Muat data dari Supabase ===== */
+  /* Inisial avatar dari nama kepala sekolah (abaikan gelar depan & belakang) */
+  function inisial(n){
+    var s=String(n||'').split(',')[0].trim().split(/\s+/).filter(function(w){return w&&!/^(dr|drs|dra|ir|prof|h|hj|ns)\.?$/i.test(w)});
+    return ((s[0]||'').charAt(0)+(s[1]||'').charAt(0)).toUpperCase()||'?'
+  }
   function syncNav(){
+    var kp=el('kepsek').value.trim();
+    if(kp){el('acName').textContent=kp;el('acAva').textContent=inisial(kp)}
     if(el('nama').value)el('navName').textContent=el('nama').value;
     var s=[el('kabupaten').value,el('provinsi').value].filter(Boolean).join(', ');if(s)el('navSub').textContent=s;
   }
