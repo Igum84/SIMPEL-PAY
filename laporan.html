@@ -253,6 +253,49 @@ table.dt{min-width:880px}
 .lihat:disabled{opacity:.6;cursor:default}
 .bk-act{display:flex;gap:6px;justify-content:flex-end}
 .lihat{text-decoration:none;display:inline-block}
+/* Kartu berkas + modal keterangan */
+.lcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:8px}
+.lc{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:11px 12px;border-radius:12px;background:var(--card);box-shadow:0 0 0 .5px var(--line),0 2px 6px rgba(30,30,80,.06);cursor:pointer;text-align:left;min-width:0;transition:transform .15s,box-shadow .15s}
+.lc:hover{transform:translateY(-2px);box-shadow:0 0 0 1px var(--accent),0 6px 16px rgba(10,122,255,.16)}
+.lc:active{transform:scale(.98)}
+.lc-t{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%}
+.lc-t b{font-size:13.5px;line-height:1.3;word-break:break-word}
+.lc-ok{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:rgba(40,200,64,.18);color:#1a8a30}
+.lc-s{font-size:12.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.lc-m{display:flex;justify-content:space-between;gap:6px;width:100%;margin-top:auto;font-size:11.5px;color:var(--muted)}
+.lc-state{grid-column:1/-1;text-align:center;padding:26px 10px;color:var(--muted);font-size:14px}
+.lp-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.lp-ht{flex:1;min-width:0}
+.lp-ht small{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.lp-ht h2{font-size:18px;letter-spacing:-.01em;line-height:1.25;word-break:break-word}
+.mact{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:16px;border-top:.5px solid var(--line)}
+.mact:empty{display:none}
+.mact .lihat{padding:10px 18px;border-radius:10px;font-size:14px}
+@media (max-width:700px){
+  .lcs{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+  .lc{padding:8px 9px;gap:4px;border-radius:10px}
+  .lc-t b{font-size:12px}.lc-s{font-size:11px}.lc-m{font-size:10px}
+  .dl{grid-template-columns:110px 1fr;font-size:13px}
+  .mact .lihat{flex:1;text-align:center}
+}
+/* Tab filter bulan */
+.btw{display:flex;align-items:flex-start;gap:6px}
+.btw .bts{flex:1;min-width:0}
+.ba{flex:none;margin-top:2px;width:30px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text);background:var(--track);transition:background .15s,transform .15s,opacity .15s}
+.ba svg{width:16px;height:16px}
+.btw.fit .ba{display:none}
+.ba:hover:not(:disabled){background:rgba(120,120,128,.28)}.ba:active:not(:disabled){transform:scale(.92)}
+.ba:disabled{opacity:.35;cursor:default}
+.bts{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.bts::-webkit-scrollbar{display:none}
+.bt{flex:none;font-size:13px;font-weight:600;padding:7px 14px;border-radius:8px;background:var(--track);color:var(--muted);white-space:nowrap;transition:background .15s,color .15s,transform .15s}
+.bt:hover{background:rgba(120,120,128,.28);color:var(--text)}
+.bt:active{transform:scale(.96)}
+.bt.on{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(10,122,255,.35)}
+.btw.fit .bt{flex:1 1 auto;text-align:center}
+@media (max-width:700px){.ba{height:29px;width:26px}.btw{gap:4px}.bts{gap:5px;padding-bottom:8px}.bt{font-size:12px;padding:6px 11px}}
+@media (min-width:900px){.btw .ba{display:none!important}.btw .bt{flex:1 1 auto;text-align:center}}
+@media print{.btw{display:none!important}.lc{break-inside:avoid}}
 </style>
 <script>if(!('PageSwapEvent' in window))document.documentElement.classList.add('pt-fb');</script>
 </head>
@@ -279,18 +322,25 @@ table.dt{min-width:880px}
     <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#c77dff,#7b2ff7)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><h2>Daftar Berkas Pembayaran Barang dan Jasa</h2></div><span class="cnt" id="bkCnt">0 data</span></div>
     <div class="bk-tw"><button class="bk-nav" id="bkPrev" type="button" aria-label="Geser tab ke kiri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="bk-tabs" id="bkTabs" role="tablist" aria-label="Jenis dokumen"></div><button class="bk-nav" id="bkNext" type="button" aria-label="Geser tab ke kanan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
     <div class="bk-bar"><label class="bk-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="bkQ" type="search" placeholder="Cari nomor order, nomor BKU, toko, penerima, kegiatan…" aria-label="Cari dokumen" autocomplete="off"></label></div>
-    <div class="bk-cards" id="bkCards"></div>
-    <div class="bk-more" id="bkMore"></div>
-    <div class="tw"><table class="dt"><thead id="bkHead"></thead><tbody id="bkBody"></tbody></table></div>
+    <div class="btw" id="bkBln"><button type="button" class="ba l" aria-label="Geser ke kiri" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><div class="bts" role="tablist" aria-label="Filter bulan"><button type="button" class="bt on" role="tab" aria-selected="true" data-b="0">Semua Transaksi</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="1">Jan</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="2">Feb</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="3">Mar</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="4">Apr</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="5">Mei</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="6">Jun</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="7">Jul</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="8">Agu</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="9">Sep</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="10">Okt</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="11">Nov</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="12">Des</button></div><button type="button" class="ba r" aria-label="Geser ke kanan" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+    <div class="lcs" id="bkCards" aria-live="polite"></div>
   </section>
 
   <section class="panel box" id="spBox">
     <div class="ph"><span class="ic" style="background:linear-gradient(160deg,#ffb454,#f0780a)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><div><h2>Daftar Berkas SPPD</h2></div><span class="cnt" id="spCnt">0 data</span></div>
     <div class="bk-bar"><label class="bk-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="spQ" type="search" placeholder="Cari nomor BKU, penerima, rekening, pengeluaran…" aria-label="Cari berkas SPPD" autocomplete="off"></label></div>
-    <div class="tw"><table class="dt"><thead id="spHead"></thead><tbody id="spBody"></tbody></table></div>
+    <div class="btw" id="spBln"><button type="button" class="ba l" aria-label="Geser ke kiri" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><div class="bts" role="tablist" aria-label="Filter bulan"><button type="button" class="bt on" role="tab" aria-selected="true" data-b="0">Semua Transaksi</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="1">Jan</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="2">Feb</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="3">Mar</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="4">Apr</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="5">Mei</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="6">Jun</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="7">Jul</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="8">Agu</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="9">Sep</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="10">Okt</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="11">Nov</button><button type="button" class="bt" role="tab" aria-selected="false" data-b="12">Des</button></div><button type="button" class="ba r" aria-label="Geser ke kanan" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+    <div class="lcs" id="spCards" aria-live="polite"></div>
   </section>
 </main>
 
+<div class="ov" id="lpOv" aria-hidden="true">
+  <div class="mcard" role="dialog" aria-modal="true" aria-labelledby="lpT">
+    <div class="lp-hd"><div class="lp-ht"><small id="lpS"></small><h2 id="lpT"></h2></div><button class="od-x" id="lpX" type="button" aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <dl class="dl" id="lpDl"></dl>
+    <div class="mact" id="lpAct"></div>
+  </div>
+</div>
 <input type="file" id="bkFile" accept="application/pdf,.pdf" hidden>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -369,7 +419,10 @@ table.dt{min-width:880px}
   $('bkTabs').innerHTML=TI.map(function(i){return '<button class="bk-tab" role="tab" type="button" data-i="'+i+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'">'+T[i].n+'</button>'}).join('');
 
   /* Definisi kolom & kartu tiap tab; rows = hasil fetch */
-  function view(i){
+  function mon(d){return +String(d||'').split('-')[1]||0}
+  var BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],bkB=0,spB=0;
+  function view(i){var v=view0(i),r=data[i];if(v.rows&&r&&r.length)v.rows.forEach(function(x,n){x.d=r[n]&&r[n].tanggal;x.o=r[n];x.f=!!(r[n]&&r[n].file_url);x.th=v.th});return v}
+  function view0(i){
     var x=T[i],r=data[i];
     if(r&&r.err)return {err:x.k==='lengkap'?'Gagal memuat data.':'Tabel "'+x.t+'" belum tersedia di database.'};
     if(!r)return {loading:1};
@@ -484,7 +537,7 @@ table.dt{min-width:880px}
           :/mime|not supported/i.test(m)?'Bucket "aset" tidak mengizinkan jenis file ini. Izinkan image/* dan application/pdf di pengaturan bucket.'
           :/size|exceed|too large/i.test(m)?'Ukuran file melebihi batas bucket "aset".'
           :'Gagal mengunggah: '+m)})
-      .then(function(){upBusy=false;draw();drawSp()});
+      .then(function(){upBusy=false;draw();drawSp();mRender()});
   }
   function upload(file){
     var X=T[upIdx],o=(data[upIdx]||[]).filter(function(x){return x.id==upId})[0];if(!o)return;
@@ -507,15 +560,11 @@ table.dt{min-width:880px}
           :/mime|not supported/i.test(m)?'Bucket "aset" tidak mengizinkan file PDF. Izinkan application/pdf di pengaturan bucket.'
           :/size|exceed|too large/i.test(m)?'Ukuran file melebihi batas bucket "aset".'
           :'Gagal mengunggah: '+m)})
-      .then(function(){upBusy=false;draw();drawSp()});
+      .then(function(){upBusy=false;draw();drawSp();mRender()});
   }
-  $('bkBody').addEventListener('click',function(e){
+  $('lpAct').addEventListener('click',function(e){
     var b=e.target.closest('button[data-up]');if(!b||upBusy)return;
-    upId=b.dataset.up;upIdx=cur;$('bkFile').value='';$('bkFile').accept=T[cur].k==='foto'?'image/*,application/pdf,.pdf':'application/pdf,.pdf';$('bkFile').click();
-  });
-  $('spBody').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-up]');if(!b||upBusy)return;
-    upId=b.dataset.up;upIdx=SP;$('bkFile').value='';$('bkFile').accept='application/pdf,.pdf';$('bkFile').click();
+    upId=b.dataset.up;upIdx=mI;$('bkFile').value='';$('bkFile').accept=T[mI].k==='foto'?'image/*,application/pdf,.pdf':'application/pdf,.pdf';$('bkFile').click();
   });
   $('bkFile').addEventListener('change',function(){
     var f=this.files&&this.files[0];if(!f)return;
@@ -525,29 +574,54 @@ table.dt{min-width:880px}
     upload(f);
   });
 
+  var lastBk=[],lastSp=[],mRow=null,mI=0;
+  function cardH(r,k,n){var c=r.c;
+    return '<div class="lc" role="button" tabindex="0" data-k="'+k+'" data-n="'+n+'" aria-label="Lihat keterangan '+esc(c.t)+'"><div class="lc-t"><b>'+esc(c.t)+'</b>'+(r.f?'<span class="lc-ok" title="PDF sudah diunggah">✓</span>':'')+'</div>'
+      +(c.b?'<span class="kode">'+esc(c.b)+'</span>':'')+'<div class="lc-s">'+esc(c.s||'—')+'</div><div class="lc-m"><span>'+esc(c.l)+'</span><span>'+c.r+'</span></div></div>'}
   function draw(){
-    var v=view(cur),q=$('bkQ').value.trim().toLowerCase(),head=$('bkHead'),body=$('bkBody'),cards=$('bkCards');
-    if(v.loading||v.err){head.innerHTML='';cards.innerHTML='';$('bkMore').textContent='';$('bkCnt').textContent='0 data';
-      body.innerHTML='<tr><td class="state">'+(v.err?esc(v.err):'Memuat data…')+'</td></tr>';return}
-    var rows=v.rows.filter(function(r){return !q||r.s.indexOf(q)>-1});
+    var v=view(cur),q=$('bkQ').value.trim().toLowerCase(),cards=$('bkCards');
+    if(v.loading||v.err){cards.innerHTML='<div class="lc-state">'+(v.err?esc(v.err):'Memuat data…')+'</div>';$('bkCnt').textContent='0 data';lastBk=[];return}
+    var rows=v.rows.filter(function(r){return (!bkB||mon(r.d)===bkB)&&(!q||r.s.indexOf(q)>-1)});lastBk=rows;
     $('bkCnt').textContent=rows.length+' data';
-    head.innerHTML='<tr>'+v.th.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr>';
-    body.innerHTML=rows.length?rows.map(function(r){return '<tr>'+r.td.map(function(c,i){return '<td class="'+(i===0?'num':'nw')+'">'+c+'</td>'}).join('')+'</tr>'}).join('')
-      :'<tr><td colspan="'+v.th.length+'" class="state">'+(q?'Tidak ada hasil untuk "'+esc(q)+'".':'Belum ada data '+esc(T[cur].n)+'.')+'</td></tr>';
-    cards.innerHTML=rows.slice(0,6).map(function(r){var c=r.c;return '<div class="bk-card"><div class="t"><b>'+esc(c.t)+'</b>'+(c.b?'<span class="kode">'+esc(c.b)+'</span>':'')+'</div><div class="s">'+esc(c.s||'—')+'</div><div class="m"><span>'+esc(c.l)+'</span><span>'+c.r+'</span></div></div>'}).join('');
-    $('bkMore').textContent=rows.length>6?'Menampilkan 6 dari '+rows.length+' data pada kartu; seluruh data ada di tabel.':'';
+    cards.innerHTML=rows.length?rows.map(function(r,n){return cardH(r,'bk',n)}).join('')
+      :'<div class="lc-state">'+(q?'Tidak ada hasil untuk "'+esc(q)+'".':(bkB?'Tidak ada data '+esc(T[cur].n)+' pada bulan '+BLN[bkB-1]+'.':'Belum ada data '+esc(T[cur].n)+'.'))+'</div>';
+  }
+  function drawSp(){
+    var v=view(SP),q=$('spQ').value.trim().toLowerCase(),cards=$('spCards');
+    if(v.loading||v.err){cards.innerHTML='<div class="lc-state">'+(v.err?esc(v.err):'Memuat data…')+'</div>';$('spCnt').textContent='0 data';lastSp=[];return}
+    var rows=v.rows.filter(function(r){return (!spB||mon(r.d)===spB)&&(!q||r.s.indexOf(q)>-1)});lastSp=rows;
+    $('spCnt').textContent=rows.length+' data';
+    cards.innerHTML=rows.length?rows.map(function(r,n){return cardH(r,'sp',n)}).join('')
+      :'<div class="lc-state">'+(q?'Tidak ada hasil untuk "'+esc(q)+'".':(spB?'Tidak ada data SPPD pada bulan '+BLN[spB-1]+'.':'Belum ada data SPPD.'))+'</div>';
   }
 
-  function drawSp(){
-    var v=view(SP),q=$('spQ').value.trim().toLowerCase(),head=$('spHead'),body=$('spBody');
-    if(v.loading||v.err){head.innerHTML='';$('spCnt').textContent='0 data';
-      body.innerHTML='<tr><td class="state">'+(v.err?esc(v.err):'Memuat data…')+'</td></tr>';return}
-    var rows=v.rows.filter(function(r){return !q||r.s.indexOf(q)>-1});
-    $('spCnt').textContent=rows.length+' data';
-    head.innerHTML='<tr>'+v.th.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr>';
-    body.innerHTML=rows.length?rows.map(function(r){return '<tr>'+r.td.map(function(c,i){return '<td class="'+(i===0?'num':'nw')+'">'+c+'</td>'}).join('')+'</tr>'}).join('')
-      :'<tr><td colspan="'+v.th.length+'" class="state">'+(q?'Tidak ada hasil untuk "'+esc(q)+'".':'Belum ada data SPPD.')+'</td></tr>';
+  /* Modal keterangan + tombol file */
+  function mRender(){
+    var box=$('lpAct');if(!box||!mRow)return;
+    var o=mRow.o,x=T[mI];
+    if(!o||x.k==='lengkap'){box.innerHTML='';return}
+    var foto=x.k==='foto',dis=upBusy?' disabled':'';
+    box.innerHTML=(o.file_url?'<a class="lihat" href="'+esc(o.file_url)+'" target="_blank" rel="noopener">'+(foto?'Lihat File':'Lihat PDF')+'</a>':'')
+      +'<button class="lihat'+(o.file_url?' alt':'')+'" type="button" data-up="'+esc(o.id)+'"'+dis+'>'+(o.file_url?'Ganti File':(foto?'Upload Foto':'Upload PDF'))+'</button>';
   }
+  function mOpen(k,n){
+    var r=(k==='bk'?lastBk:lastSp)[n];if(!r)return;
+    mRow=r;mI=k==='bk'?cur:SP;
+    $('lpS').textContent=T[mI].n;$('lpT').textContent=r.c.t||'—';
+    var h='';(r.th||[]).forEach(function(th,i){if(i===0||/Aksi/.test(th))return;h+='<dt>'+th+'</dt><dd>'+r.td[i]+'</dd>'});
+    $('lpDl').innerHTML=h;mRender();
+    var ov=$('lpOv');ov.classList.add('open');ov.setAttribute('aria-hidden','false');
+  }
+  function mClose(){var ov=$('lpOv');ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
+  $('lpX').addEventListener('click',mClose);
+  $('lpOv').addEventListener('click',function(e){if(e.target===this)mClose()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')mClose()});
+  ['bkCards','spCards'].forEach(function(id){
+    var el=$(id),k=id==='bkCards'?'bk':'sp';
+    el.addEventListener('click',function(e){var c=e.target.closest('.lc');if(c)mOpen(k,+c.dataset.n)});
+    el.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('lc')){e.preventDefault();mOpen(k,+e.target.dataset.n)}});
+  });
+
   function loadSp(){
     data[SP]=null;drawSp();
     get('sppd','select=*&order=id.desc').then(function(a){data[SP]=a||[]}).catch(function(){data[SP]={err:1}}).then(drawSp);
@@ -588,6 +662,20 @@ table.dt{min-width:880px}
   $('bkQ').addEventListener('input',draw);
   $('spQ').addEventListener('input',drawSp);
   document.addEventListener('surat-saved',function(){if(cur===0||T[cur].k==='lengkap')load(cur)});
+  function initBln(id,set){
+    var w=$(id),t=w.querySelector('.bts'),L=w.querySelector('.ba.l'),R=w.querySelector('.ba.r');
+    function upd(){var m=t.scrollWidth-t.clientWidth;w.classList.toggle('fit',t.scrollWidth<=w.clientWidth+2);L.disabled=t.scrollLeft<=2;R.disabled=m<=2||t.scrollLeft>=m-2}
+    t.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);setTimeout(upd,0);setTimeout(upd,400);
+    if(window.ResizeObserver)new ResizeObserver(upd).observe(w);
+    L.addEventListener('click',function(){t.scrollBy({left:-Math.max(120,t.clientWidth*.6),behavior:'smooth'})});
+    R.addEventListener('click',function(){t.scrollBy({left:Math.max(120,t.clientWidth*.6),behavior:'smooth'})});
+    t.addEventListener('click',function(e){var b=e.target.closest('.bt');if(!b)return;
+      [].forEach.call(t.children,function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on)});
+      if(b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+      set(+b.dataset.b)});
+  }
+  initBln('bkBln',function(b){bkB=b;draw()});
+  initBln('spBln',function(b){spB=b;drawSp()});
   pick(0);loadSp();
 })();
 </script>
